@@ -11,12 +11,14 @@ class Menu extends Model
 
     protected $fillable = ['category_id','description','name','picture','price','status'];
 
+    protected $table = 'menu';
+
     public function category()
     {
-        $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class);
     }
     public function orders()
     {
-        $this->belongsToMany(Order::class);
+        return $this->belongsToMany(Order::class);
     }
 }

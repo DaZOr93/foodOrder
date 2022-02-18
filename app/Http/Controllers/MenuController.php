@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class MenuController extends Controller
 {
@@ -13,9 +15,21 @@ class MenuController extends Controller
      */
     public function index()
     {
-        //
+
+        $categories = Category::all();
+        $menu = Menu::all();
+
+        return view('index', ['categories' => $categories, 'menu' => $menu]);
     }
 
+    public function category($category){
+        $name_category = '';
+        $categories = Category::all();
+        $menu = Menu::where('category_id' ,$category)->get();
+
+        return view('index', ['categories' => $categories, 'menu'=>$menu]);
+
+    }
     /**
      * Show the form for creating a new resource.
      *

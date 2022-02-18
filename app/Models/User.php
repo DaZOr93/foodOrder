@@ -45,17 +45,17 @@ class User extends Authenticatable
 
     public function address()
     {
-        $this->hasMany(Address::class);
+       return $this->hasMany(Address::class);
     }
 
-    public function order()
+    public function orders()
     {
-        $this->hasMany(Order::class);
+        return $this->hasMany(Order::class);
     }
 
     public function role()
     {
-        $this->belongsTo(Role::class);
+       return $this->belongsTo(Role::class);
     }
 }
 

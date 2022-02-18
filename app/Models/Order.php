@@ -11,16 +11,16 @@ class Order extends Model
 
     public function address()
     {
-        $this->belongsTo(Address::class);
+        return $this->belongsTo(Address::class);
     }
 
     public function user()
     {
-        $this->belongsTo(User::class);
+       return $this->belongsTo(User::class);
     }
 
     public function menu()
     {
-        $this->belongsToMany(Menu::class);
+        return $this->belongsToMany(Menu::class);
     }
 }
