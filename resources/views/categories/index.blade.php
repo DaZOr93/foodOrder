@@ -24,7 +24,7 @@
                 <tr>
                     <th scope="row"> {{$category->id}} </th>
                     <td> {{$category->name}} </td>
-                    <td> <img class="rounded-circle" src="{{asset("$category->picture")}}" alt="Generic placeholder image" width="140" height="140"></td>
+                    <td> <img class="rounded-circle category" src="{{asset("$category->picture")}}" alt="Generic placeholder image" width="140" height="140"></td>
                     <td>
                         <a class="btn btn-primary mt-3 mb-3 btn-sm" href="{{route('category.edit', $category->id) }} ">Редактировать</a>
 

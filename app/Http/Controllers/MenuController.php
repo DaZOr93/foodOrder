@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Menu\StoreRequest;
+use App\Http\Requests\Menu\UpdateRequest;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return
      */
     public function index()
     {
@@ -23,21 +26,22 @@ class MenuController extends Controller
     }
 
     public function category($category){
-        $name_category = '';
+
         $categories = Category::all();
         $menu = Menu::where('category_id' ,$category)->get();
 
-        return view('index', ['categories' => $categories, 'menu'=>$menu]);
+        return view('index', ['categories' => $categories, 'menu'=>$menu, 'categoryId'=>$category]);
 
     }
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('menu.create', ['categories' => $categories]);
     }
 
     /**
@@ -46,9 +50,19 @@ class MenuController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest  $request)
     {
-        //
+
+        $data = $request->except('_token','image');
+        if ($request->isMethod('post') && $request->file('image')) {
+            $file = $request->file('image');
+            $upload_folder = 'public/image';
+            $filename = date("YmdHis") . "-" . $file->getClientOriginalName(); // image.jpg
+            Storage::putFileAs($upload_folder, $file, $filename);
+            $data['picture' ] =  'storage/image/' . $filename;
+        }
+        Menu::create($data);
+        return redirect()->route('index');
     }
 
     /**
@@ -70,7 +84,9 @@ class MenuController extends Controller
      */
     public function edit($id)
     {
-        //
+       $menu = Menu::find($id);
+       $categories = Category::all();
+       return view('menu.update', ['menu'=>$menu, 'categories'=>$categories]);
     }
 
     /**
@@ -80,9 +96,20 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
-        //
+        $data = $request->except('_token','image');
+        if ($request->isMethod('post') && $request->file('image')) {
+            $file = $request->file('image');
+            $upload_folder = 'public/image';
+            $filename = date("YmdHis") . "-" . $file->getClientOriginalName(); // image.jpg
+            Storage::putFileAs($upload_folder, $file, $filename);
+            $data['picture' ] =  'storage/image/' . $filename;
+        }
+        $menu = Menu::find($id);
+        $menu->update($data);
+
+        return redirect()->route('index');
     }
 
     /**

@@ -64,7 +64,7 @@ Route::group([
     Route::post('/', [MenuController::class, 'store'])->name('store');
     Route::get('/{menu}', [MenuController::class, 'show'])->name('show');
     Route::get('/{menu}/edit', [MenuController::class, 'edit'])->name('edit');
-    Route::put('/{menu}', [MenuController::class, 'update'])->name('update');
+    Route::post('/{menu}', [MenuController::class, 'update'])->name('update');
     Route::delete('/{menu}', [MenuController::class, 'destroy'])->name('destroy');
 });
 

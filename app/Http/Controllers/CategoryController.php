@@ -63,7 +63,8 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+
+
     }
 
     /**
@@ -94,8 +95,7 @@ class CategoryController extends Controller
             $upload_folder = 'public/image';
             $filename = date("YmdHis") . "-" . $file->getClientOriginalName(); // image.jpg
             Storage::putFileAs($upload_folder, $file, $filename);
-            $data = ['name' => $request->name, 'picture' => 'storage/image/' . $filename];
-
+            $data['picture' ] =  'storage/image/' . $filename;
         }
         $category = Category::find($id);
         $category->update($data);
@@ -115,8 +115,8 @@ class CategoryController extends Controller
         if ($categoryId->isEmpty()) {
             $category = Category::find($id);
             $category->delete();
-        };
+        }
 
-        return redirect()->route('category.index');
+        return redirect()->back();
     }
 }

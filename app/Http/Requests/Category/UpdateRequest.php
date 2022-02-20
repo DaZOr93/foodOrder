@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class UpdateRequest extends FormRequest
     {
 
         return [
-            'name'=> ['required','string','min:3','max:255',"unique:categories"],
+            'name'=> ['required','string','min:3','max:255',Rule::unique('categories')->ignore($this->category)],
             'image' => ['image']
         ];
     }
