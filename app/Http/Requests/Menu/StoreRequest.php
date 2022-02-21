@@ -25,7 +25,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'name'=> ['required','string','min:3','max:255',"unique:menu"],
-            'category_id' => ['bail', 'required', 'integer', 'exists:roles,id'],
+            'category_id' => ['bail', 'required', 'integer', 'exists:categories,id'],
             'description'=> ['required','string','min:20','max:255'],
             'price'=>['required', 'integer', 'min:1','max:2000'],
             'status'=>['required','in:active,not active'],

@@ -6,7 +6,11 @@
     <div class="px-3 py-2 border-bottom mb-3">
         <div class="container d-flex flex-wrap justify-content-center">
             <h4>Категории</h4>
-            <a class="category_edit" href="{{ route("category.index")}}">Ред.</a>
+            @auth
+                @if(Auth::user()->role_id==1)
+                <a class="category_edit" href="{{ route("category.index")}}">Ред.</a>
+                @endif
+            @endauth
         </div>
     </div>
     <div class="row">
@@ -25,7 +29,11 @@
             <div class="px-3 py-2 border-bottom border-top mb-3">
                 <div class="container d-flex flex-wrap justify-content-center">
                     <h4>Меню</h4>
-                    <a class="category_edit" href="{{ route("menu.create")}}">Доб.</a>
+                    @auth
+                        @if(Auth::user()->role_id==1)
+                        <a class="category_edit" href="{{ route("menu.create")}}">Доб.</a>
+                        @endif
+                    @endauth
                 </div>
             </div>
             <div class="row">
@@ -39,10 +47,20 @@
                             <p class="category_menu card-text">{{$menu_position->category->name}} </p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                    @auth
+                                    @if(Auth::user()->role_id==1)
                                     <a href="{{route('menu.edit', $menu_position->id) }}">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Редактировать</button>
                                     </a>
+                                            <form id="destroy-form" action=" {{route('menu.destroy', $menu_position->id)}} " method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <button class="btn btn-sm btn-outline-secondary" onclick="return confirm('Удалить блюдо')" type="submit">Удалить</button>
+                                            </form>
+                                    @else
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Добавить в корзину</button>
+                                    @endif
+                                    @endauth
                                 </div>
                                 <small class="text-muted">{{$menu_position->price}} грн.</small>
                             </div>

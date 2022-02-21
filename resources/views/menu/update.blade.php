@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Создать категорию')
+@section('title', 'Редактирование блюда')
 
 @section('content')
     <div class="container">

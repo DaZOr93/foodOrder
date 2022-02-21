@@ -59,7 +59,7 @@
 
                 <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                     <li>
-                        <a href="#" class="nav-link text-white">
+                        <a href="/" class="nav-link text-white">
                             <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                 <use xlink:href="#grid"></use>
                             </svg>
@@ -102,17 +102,28 @@
                                     Профиль
                                 </a>
                             </li>
+                            <li>
+                                <a href="#" class="nav-link text-white">
+                                    <svg class="bi d-block mx-auto mb-1" width="24" height="24">
+                                        <use xlink:href="#speedometer2"></use>
+                                    </svg>
+                                    Корзина
+                                </a>
+                            </li>
                         @endif
-                    @endauth
-                    <li>
-                        <a href="#" class="nav-link text-white">
-                            <svg class="bi d-block mx-auto mb-1" width="24" height="24">
-                                <use xlink:href="#speedometer2"></use>
-                            </svg>
-                            Корзина
-                        </a>
-                    </li>
                 </ul>
+                <div class="text-end">
+                    <a class="nav-link" href="{{ route('logout') }}"
+                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                        <button type="button" class="btn btn-light text-dark me-2">Выход</button>
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                </div>
+                @endauth
                 @guest
                     <div class="text-end">
                         <a href="{{ route('login') }}">
