@@ -70,6 +70,5 @@
                 @endforeach
             </div>
 
-    <img src="" alt="">
 
 @endsection

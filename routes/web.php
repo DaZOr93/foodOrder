@@ -4,6 +4,7 @@ use App\Http\Controllers\BasketController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -79,4 +80,17 @@ Route::group([
     Route::get('/{basket}/edit', [BasketController::class, 'edit'])->name('edit');
     Route::put('/{basket}', [BasketController::class, 'update'])->name('update');
     Route::delete('/{basket}', [BasketController::class, 'destroy'])->name('destroy');
+});
+
+Route::group([
+    'as' => 'profile.',
+    'prefix' => 'profile',
+], function() {
+    Route::get('/', [ProfileController::class, 'index'])->name('index');
+    Route::get('/create', [ProfileController::class, 'create'])->name('create');
+    Route::post('/', [ProfileController::class, 'store'])->name('store');
+    Route::get('/{profile}', [ProfileController::class, 'show'])->name('show');
+    Route::get('/{profile}/edit', [ProfileController::class, 'edit'])->name('edit');
+    Route::put('/{profile}', [ProfileController::class, 'update'])->name('update');
+    Route::delete('/{profile}', [ProfileController::class, 'destroy'])->name('destroy');
 });
