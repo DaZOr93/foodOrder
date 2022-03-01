@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Address\StoreRequest;
+use App\Models\Address;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class BasketController extends Controller
+class AddressController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +26,7 @@ class BasketController extends Controller
      */
     public function create()
     {
-        //
+        return view('address.create');
     }
 
     /**
@@ -32,9 +35,12 @@ class BasketController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreReques $request)
     {
-        //
+        $data = $request->validated();
+        $data['user_id'] = Auth::user()->id;
+        Address::create($data);
+        return redirect()->route('profile.index');
     }
 
     /**
@@ -54,9 +60,12 @@ class BasketController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function add($id)
+    public function edit($id)
     {
-        //
+        $address = Address::find($id);
+        return view('address.edit', ['address' => $address]);
+
+
     }
 
     /**
@@ -66,9 +75,14 @@ class BasketController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreRequest $request, $id)
     {
-        //
+        $address = Address::find($id);
+        $data = $request->validated();
+        $address->update($data);
+
+        return redirect()->route('profile.index');
+
     }
 
     /**

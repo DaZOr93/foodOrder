@@ -11,6 +11,8 @@ class Address extends Model
 
     protected $fillable = ['apartment','city','house','street','user_id'];
 
+    protected $table = 'address';
+
     public function order()
     {
         return $this->hasOne(Order::class);

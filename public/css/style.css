@@ -51,3 +51,6 @@ a.active {
     font-size: 12px;
     text-align: center;
 }
+input.quantity  {
+    width: 62px;
+}

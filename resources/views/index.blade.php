@@ -58,7 +58,13 @@
                                                 <button class="btn btn-sm btn-outline-secondary" onclick="return confirm('Удалить блюдо')" type="submit">Удалить</button>
                                             </form>
                                     @else
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Добавить в корзину</button>
+                                            <form action="{{ route('basket.add', ['menu_id' => $menu_position->id]) }}" method="post" class="d-flex">
+                                                @csrf
+
+                                            <input type="number" name="quantity" max="20" min="1" value="1" class="form-control quantity" >
+                                            <button type="submit" class="btn btn-sm btn-outline-secondary">Добавить в корзину</button>
+
+                                            </form>
                                     @endif
                                     @endauth
                                 </div>

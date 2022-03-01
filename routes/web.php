@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\BasketController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MenuController;
@@ -77,7 +78,7 @@ Route::group([
     Route::get('/create', [BasketController::class, 'create'])->name('create');
     Route::post('/', [BasketController::class, 'store'])->name('store');
     Route::get('/{basket}', [BasketController::class, 'show'])->name('show');
-    Route::get('/{basket}/edit', [BasketController::class, 'edit'])->name('edit');
+    Route::post('/{menu_id}/add', [BasketController::class, 'add'])->name('add');
     Route::put('/{basket}', [BasketController::class, 'update'])->name('update');
     Route::delete('/{basket}', [BasketController::class, 'destroy'])->name('destroy');
 });
@@ -87,10 +88,17 @@ Route::group([
     'prefix' => 'profile',
 ], function() {
     Route::get('/', [ProfileController::class, 'index'])->name('index');
-    Route::get('/create', [ProfileController::class, 'create'])->name('create');
-    Route::post('/', [ProfileController::class, 'store'])->name('store');
-    Route::get('/{profile}', [ProfileController::class, 'show'])->name('show');
-    Route::get('/{profile}/edit', [ProfileController::class, 'edit'])->name('edit');
     Route::put('/{profile}', [ProfileController::class, 'update'])->name('update');
-    Route::delete('/{profile}', [ProfileController::class, 'destroy'])->name('destroy');
 });
+
+Route::group([
+    'as' => 'address.',
+    'prefix' => 'address',
+], function() {
+    Route::get('/create', [AddressController::class, 'create'])->name('create');
+    Route::post('/', [AddressController::class, 'store'])->name('store');
+    Route::get('/{address}/edit', [AddressController::class, 'edit'])->name('edit');
+    Route::put('/{address}', [AddressController::class, 'update'])->name('update');
+    Route::delete('/{address}', [AddressController::class, 'destroy'])->name('destroy');
+});
+
