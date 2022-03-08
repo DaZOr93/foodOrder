@@ -44,6 +44,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function basket()
+    {
+        return $this->hasMany(Basket::class);
+    }
+
     public function address()
     {
        return $this->hasMany(Address::class);

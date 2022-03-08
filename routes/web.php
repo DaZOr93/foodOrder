@@ -78,7 +78,7 @@ Route::group([
     Route::get('/create', [BasketController::class, 'create'])->name('create');
     Route::post('/', [BasketController::class, 'store'])->name('store');
     Route::get('/{basket}', [BasketController::class, 'show'])->name('show');
-    Route::post('/{menu_id}/add', [BasketController::class, 'add'])->name('add');
+    Route::post('/{menu_id}/', [BasketController::class, 'add'])->name('add');
     Route::put('/{basket}', [BasketController::class, 'update'])->name('update');
     Route::delete('/{basket}', [BasketController::class, 'destroy'])->name('destroy');
 });

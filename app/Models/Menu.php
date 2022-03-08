@@ -21,4 +21,8 @@ class Menu extends Model
     {
         return $this->belongsToMany(Order::class);
     }
+    public function basket()
+    {
+        return $this->hasMany(Basket::class);
+    }
 }
