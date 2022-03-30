@@ -16,10 +16,10 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('address_id')->constrained('address');
-            $table->enum('status',['new', 'processing','delivered','completed','canceled']);
+            $table->string('address');
+            $table->enum('status',['new', 'processing','delivered','completed','canceled'])->default("new");
             $table->integer( 'order_price');
-            $table->string('comment');
+            $table->string('comment')->nullable();
             $table->string('phone');
             $table->timestamps();
         });

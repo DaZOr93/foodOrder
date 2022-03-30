@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Basket\AddRequest;
+use App\Models\Address;
 use App\Models\Basket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,9 +18,8 @@ class BasketController extends Controller
     public function index()
     {
         $basket = Basket::where('user_id', Auth::user()->id)->get();
-        foreach ($basket as $basket_item ){
-            dd($basket_item->menu->name);
-        }
+        $address = Address::where('user_id',Auth::user()->id)->get();
+        return view('basket.index', ['basket' => $basket, 'address'=>$address]);
 
     }
 
@@ -80,17 +80,6 @@ class BasketController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -100,6 +89,10 @@ class BasketController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $basket_item = Basket::find($id);
+        if($basket_item->user_id == Auth::user()->id){
+            $basket_item->delete();
+        }
+        return redirect()->back();
     }
 }
