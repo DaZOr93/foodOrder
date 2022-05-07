@@ -69,7 +69,7 @@
                     @auth
                         @if(Auth::user()->role_id==1)
                             <li>
-                                <a href="#" class="nav-link text-white">
+                                <a href="{{ route('orders.dashboard') }}" class="nav-link text-white">
                                     <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                         <use xlink:href="#table"></use>
                                     </svg>
@@ -87,7 +87,7 @@
                             </li>
                         @elseif(Auth::user()->role_id==3)
                             <li>
-                                <a href="#" class="nav-link text-white">
+                                <a href="{{ route('orders.index') }}" class="nav-link text-white">
                                     <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                         <use xlink:href="#table"></use>
                                     </svg>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Order\StatusRequest;
 use App\Http\Requests\Order\StoreRequest;
 use App\Models\Address;
 use App\Models\Basket;
@@ -19,17 +20,19 @@ class OrderController extends Controller
      */
     public function index()
     {
-        dd(DB::select('select * from users where id = 1'));
+       $orders = Order::where('user_id', Auth::user()->id)->paginate(10);
+        return view('orders.index', ['orders' => $orders]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     *
      */
-    public function create()
+    public function dashboard()
     {
-        //
+        $orders = Order::paginate(10);
+        return(view('orders.dashboard',['orders'=>$orders]));
     }
 
     /**
@@ -58,7 +61,7 @@ class OrderController extends Controller
                 'order_price' => $order_price,
                 'user_id' => Auth::user()->id,
             ]);
-            dd($order);
+
 
         }
 
@@ -79,11 +82,14 @@ class OrderController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return
      */
-    public function edit($id)
+    public function status(StatusRequest $request, $id)
     {
-        //
+        $data = $request->validated();
+        $order = Order::find($id);
+        $order ->update($data);
+        return redirect()->back();
     }
 
     /**
