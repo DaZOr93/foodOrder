@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Address\StoreRequest;
-use App\Models\Address;
+use App\Http\Requests\User\UpdateRequest;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class AddressController extends Controller
+class UserController extends Controller
 {
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $users = User::paginate(10);
+        return view('users.index', ['users'=>$users]);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -18,7 +27,7 @@ class AddressController extends Controller
      */
     public function create()
     {
-        return view('address.create');
+        //
     }
 
     /**
@@ -27,14 +36,21 @@ class AddressController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreReques $request)
+    public function store(Request $request)
     {
-        $data = $request->validated();
-        $data['user_id'] = Auth::user()->id;
-        Address::create($data);
-        return redirect()->route('profile.index');
+        //
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -44,10 +60,9 @@ class AddressController extends Controller
      */
     public function edit($id)
     {
-        $address = Address::find($id);
-        return view('address.edit', ['address' => $address]);
-
-
+        $user = User::find($id);
+        $roles = Role::get();
+       return view('users.edit',['user'=>$user,'roles'=>$roles]);
     }
 
     /**
@@ -57,14 +72,9 @@ class AddressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreRequest $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
-        $address = Address::find($id);
-        $data = $request->validated();
-        $address->update($data);
-
-        return redirect()->route('profile.index');
-
+        //
     }
 
     /**

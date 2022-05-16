@@ -6,6 +6,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,19 +21,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/1', function () {
-    return view('index');
-});
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
+Route::group([
+    'as' => 'user.',
+    'prefix' => 'user',
+    'middleware'=>['auth','role:1'],
+], function () {
+    Route::get('/', [UserController::class, 'index'])->name('index');
+    Route::get('/create', [UserController::class, 'create'])->name('create');
+    Route::post('/', [UserController::class, 'store'])->name('store');
+    Route::get('/{user}', [UserController::class, 'edit'])->name('edit');
+    Route::put('/{user}', [UserController::class, 'update'])->name('update');
+    Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+});
 
 Route::group([
     'as' => 'category.',
     'prefix' => 'category',
+    'middleware'=>'role:1,2',
 ], function() {
     Route::get('/', [CategoryController::class, 'index'])->name('index');
     Route::get('/create', [CategoryController::class, 'create'])->name('create');
@@ -45,9 +58,11 @@ Route::group([
 Route::group([
     'as' => 'orders.',
     'prefix' => 'orders',
+    'middleware'=>'auth',
+
 ], function() {
-    Route::get('/', [OrderController::class, 'index'])->name('index');
-    Route::get('/dashboard', [OrderController::class, 'dashboard'])->name('dashboard');
+    Route::get('/', [OrderController::class, 'index'])->name('index')->middleware(['role:3']);
+    Route::get('/dashboard', [OrderController::class, 'dashboard'])->name('dashboard')->middleware(['role:1,2']);
     Route::post('/', [OrderController::class, 'store'])->name('store');
     Route::get('/{order}', [OrderController::class, 'show'])->name('show');
     Route::post('/{id}/status', [OrderController::class, 'status'])->name('status');
@@ -62,17 +77,18 @@ Route::group([
     'prefix' => 'menu',
 ], function() {
     Route::get('/category/{category}', [MenuController::class, 'category'])->name('category');
-    Route::get('/create', [MenuController::class, 'create'])->name('create');
-    Route::post('/', [MenuController::class, 'store'])->name('store');
+    Route::get('/create', [MenuController::class, 'create'])->name('create')->middleware(['role:1,2']);
+    Route::post('/', [MenuController::class, 'store'])->name('store')->middleware(['role:1,2']);
     Route::get('/{menu}', [MenuController::class, 'show'])->name('show');
-    Route::get('/{menu}/edit', [MenuController::class, 'edit'])->name('edit');
-    Route::post('/{menu}', [MenuController::class, 'update'])->name('update');
-    Route::delete('/{menu}', [MenuController::class, 'destroy'])->name('destroy');
+    Route::get('/{menu}/edit', [MenuController::class, 'edit'])->name('edit')->middleware(['role:1,2']);
+    Route::post('/{menu}', [MenuController::class, 'update'])->name('update')->middleware(['role:1,2']);
+    Route::delete('/{menu}', [MenuController::class, 'destroy'])->name('destroy')->middleware(['role:1,2']);
 });
 
 Route::group([
     'as' => 'basket.',
     'prefix' => 'basket',
+    'middleware'=>['auth','role:3'],
 ], function() {
     Route::get('/', [BasketController::class, 'index'])->name('index');
     Route::get('/create', [BasketController::class, 'create'])->name('create');
@@ -86,6 +102,7 @@ Route::group([
 Route::group([
     'as' => 'profile.',
     'prefix' => 'profile',
+    'middleware'=>'auth',
 ], function() {
     Route::get('/', [ProfileController::class, 'index'])->name('index');
     Route::put('/{profile}', [ProfileController::class, 'update'])->name('update');
@@ -94,6 +111,7 @@ Route::group([
 Route::group([
     'as' => 'address.',
     'prefix' => 'address',
+    'middleware'=>'auth',
 ], function() {
     Route::get('/create', [AddressController::class, 'create'])->name('create');
     Route::post('/', [AddressController::class, 'store'])->name('store');

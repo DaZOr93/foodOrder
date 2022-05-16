@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Profile;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules;
+
 class UpdateRequest extends FormRequest
 {
     /**
@@ -28,9 +28,10 @@ class UpdateRequest extends FormRequest
 
         return [
             'name' => ['required', 'string', 'min:3', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore(Auth::user()->id)],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($this->user)],
             'password' => [ 'confirmed','nullable', 'min:8'],
             'phone' => 'required|regex:/^\+380\d{3}\d{2}\d{2}\d{2}$/',
+            'role_id' => ['bail', 'required', 'integer', 'exists:roles,id'],
 
 
         ];
@@ -47,6 +48,8 @@ class UpdateRequest extends FormRequest
             'email.unique' =>'Пользователь с таким Email уже существует',
             'password.confirmed' => 'Пароли не совпадают',
             'phone.regex' => 'Не верный формат',
+            'role_id.exists' => 'Такая Роль не существует',
+            'role_id.integer' => 'Не коректно задан параметр Роли'
         ];
     }
 }
