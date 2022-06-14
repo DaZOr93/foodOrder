@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\LoadPictureFacade as LoadPicture;
 use App\Http\Requests\Menu\StoreRequest;
 use App\Http\Requests\Menu\UpdateRequest;
 use App\Models\Menu;
@@ -54,11 +55,8 @@ class MenuController extends Controller
     {
 
         $data = $request->except('_token','image');
-        if ($request->isMethod('post') && $request->file('image')) {
-            $file = $request->file('image');
-            $upload_folder = 'public/image';
-            $filename = date("YmdHis") . "-" . $file->getClientOriginalName(); // image.jpg
-            Storage::putFileAs($upload_folder, $file, $filename);
+        if ($request->file('image')) {
+            $filename = LoadPicture::saveImage($request->file('image'));
             $data['picture' ] =  'storage/image/' . $filename;
         }
         Menu::create($data);
@@ -99,11 +97,8 @@ class MenuController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         $data = $request->except('_token','image');
-        if ($request->isMethod('post') && $request->file('image')) {
-            $file = $request->file('image');
-            $upload_folder = 'public/image';
-            $filename = date("YmdHis") . "-" . $file->getClientOriginalName(); // image.jpg
-            Storage::putFileAs($upload_folder, $file, $filename);
+        if ($request->file('image')) {
+            $filename = LoadPicture::saveImage($request->file('image'));
             $data['picture' ] =  'storage/image/' . $filename;
         }
         $menu = Menu::find($id);

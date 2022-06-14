@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\LoadPictureFacade as LoadPicture;
 use App\Http\Requests\Category\StoreRequest;
 use App\Http\Requests\Category\UpdateRequest;
 use App\Models\Category;
@@ -42,13 +43,7 @@ class CategoryController extends Controller
      */
     public function store(StoreRequest $request)
     {
-
-        if ($request->isMethod('post') && $request->file('image')) {
-            $file = $request->file('image');
-            $upload_folder = 'public/image';
-            $filename = date("YmdHis") . "-" . $file->getClientOriginalName(); // image.jpg
-            Storage::putFileAs($upload_folder, $file, $filename);
-        }
+        $filename = LoadPicture::saveImage($request->file('image'));
         $category = ['name' => $request->name, 'picture' => 'storage/image/' . $filename];
         Category::create($category);
         return redirect()->route('category.index');
@@ -90,11 +85,8 @@ class CategoryController extends Controller
     {
         $data = ['name' => $request->name];
 
-        if ($request->isMethod('post') && $request->file('image')) {
-            $file = $request->file('image');
-            $upload_folder = 'public/image';
-            $filename = date("YmdHis") . "-" . $file->getClientOriginalName(); // image.jpg
-            Storage::putFileAs($upload_folder, $file, $filename);
+        if ($request->file('image')) {
+            $filename = LoadPicture::saveImage($request->file('image'));
             $data['picture' ] =  'storage/image/' . $filename;
         }
         $category = Category::find($id);
