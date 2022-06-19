@@ -36,6 +36,11 @@ class MenuController extends Controller
 
         $categories = Category::all();
         $menu = Menu::where('category_id' ,$category)->where('status' ,'active')->get();
+        if(Auth::user()){
+            if(Auth::user()->role_id === 1){
+                $menu = Menu::where('category_id' ,$category)->get();
+            }
+        }
 
         return view('index', ['categories' => $categories, 'menu'=>$menu, 'categoryId'=>$category]);
 
