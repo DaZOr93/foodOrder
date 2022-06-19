@@ -23,7 +23,7 @@
                 <tr>
                     <th scope="row"> {{$loop->iteration}} </th>
                     <td>
-                        <a href="{{ route('orders.show', $order->id) }}">
+                        <a href="{{ route('orders.dashboard_show', $order->id) }}">
                             {{$order->id}}
                         </a>
                     </td>

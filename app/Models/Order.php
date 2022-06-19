@@ -23,6 +23,6 @@ class Order extends Model
 
     public function menu()
     {
-        return $this->belongsToMany(Menu::class);
+        return $this->belongsToMany(Menu::class)->withPivot('price', 'quantity', 'total_cost' , 'name');;
     }
 }

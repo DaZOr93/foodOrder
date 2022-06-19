@@ -29,7 +29,7 @@
                     </td>
                     <td> {{$order->created_at}} </td>
                     <td> {{$order->order_price}} </td>
-                    <td> {{$order->status}} </td>
+                    <td> {{trans("order.status.$order->status")}} </td>
                 </tr>
             @empty
                 нет заказов

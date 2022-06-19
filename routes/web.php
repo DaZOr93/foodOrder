@@ -80,8 +80,9 @@ Route::group([
 ], function() {
     Route::get('/', [OrderController::class, 'index'])->name('index')->middleware(['role:3']);
     Route::get('/dashboard', [OrderController::class, 'dashboard'])->name('dashboard')->middleware(['role:1,2']);
+    Route::get('dashboard/{order}', [OrderController::class, 'dashboard_show'])->name('dashboard_show')->middleware(['role:1,2']);
     Route::post('/', [OrderController::class, 'store'])->name('store');
-    Route::get('/{order}', [OrderController::class, 'show'])->name('show');
+    Route::get('/{order}', [OrderController::class, 'show'])->name('show')->middleware(["my_order"]);
     Route::post('/{id}/status', [OrderController::class, 'status'])->name('status');
     Route::put('/{order}', [OrderController::class, 'update'])->name('update');
     Route::delete('/{order}', [OrderController::class, 'destroy'])->name('destroy');

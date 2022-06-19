@@ -96,7 +96,7 @@
                                            href="{{route('address.edit', $address_item->id) }} ">Редактировать</a>
 
                                         <form id="destroy-form"
-                                              action=" {{route('category.destroy', $address_item->id)}} " method="POST">
+                                              action=" {{route('address.destroy', $address_item->id)}} " method="POST">
                                             @csrf
                                             @method('delete')
                                             <button class="btn btn-danger btn-sm"
@@ -109,8 +109,9 @@
                             @endforelse
                             </tbody>
                         </table>
-                        <a class="btn btn-primary btn-lg" href="{{ route('address.create') }}" role="button">Добавить
-                            адрес</a>
+                        <a class="btn btn-primary btn-lg" href="{{ route('address.create') }}" role="button">
+                            Добавить адрес
+                        </a>
                     </div>
                 </div>
             </div>

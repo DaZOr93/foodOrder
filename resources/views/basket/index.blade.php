@@ -48,6 +48,8 @@ $basket_cost = 0;
                     </td>
                 </tr>
             @empty
+                Товаров нет, добавьте что то
+
             @endforelse
             </tbody>
             <tfoot>
@@ -57,6 +59,8 @@ $basket_cost = 0;
             </tr>
             </tfoot>
         </table>
+
+            @if(!$basket->isEmpty())
             <p class="lead">Адрес</p>
             <table class="table table-striped">
                 <tbody>
@@ -73,14 +77,20 @@ $basket_cost = 0;
                             @endif
                         </td>
                     </tr>
-
                 @empty
+                        <a class="btn btn-primary btn-lg" href="{{ route('address.create') }}" role="button">Добавить адрес</a>
                 @endforelse
                 </tbody>
             </table>
+                @error('address_id')
+               <div class="text-red-600 mb-4">Выберите адрес</div>
+                @enderror
             @csrf
+            @if(!$address->isEmpty())
             <button class="btn btn-primary btn-lg"  type="submit">Оформить заказ</button>
+            @endif
             </form>
+            @endif
         </div>
     </div>
 @endsection

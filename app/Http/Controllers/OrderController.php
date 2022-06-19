@@ -20,19 +20,21 @@ class OrderController extends Controller
      */
     public function index()
     {
-       $orders = Order::where('user_id', Auth::user()->id)->paginate(10);
+       $orders = Order::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10);
         return view('orders.index', ['orders' => $orders]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     *
-     */
     public function dashboard()
     {
-        $orders = Order::paginate(10);
+        $orders = Order::orderBy('created_at', 'desc')->paginate(10);
         return(view('orders.dashboard',['orders'=>$orders]));
+    }
+
+    public function dashboard_show($id)
+    {
+        $order = Order::find($id);
+
+        return view('orders.dashboard_show', ['order' => $order]);
     }
 
     /**
@@ -52,8 +54,19 @@ class OrderController extends Controller
             }
             $basket = Basket::where('user_id', Auth::user()->id)->with(['menu'])->get();
             $order_price = 0;
+            $pivotData = [];
             foreach ($basket as $basket_item) {
-                $order_price += $basket_item->quantity * $basket_item->menu->price;
+                $total_cost_item = $basket_item->quantity * $basket_item->menu->price;
+                $pivotData[$basket_item->menu->id] =
+                        [
+                            'price' => $basket_item->menu->price,
+                            'quantity'=> $basket_item->quantity,
+                            'total_cost' => $total_cost_item,
+                            'name' => $basket_item->menu->name,
+                        ];
+
+                $order_price += $total_cost_item;
+
             }
             $order = Order::create([
                 'address' => $address_order,
@@ -61,8 +74,10 @@ class OrderController extends Controller
                 'order_price' => $order_price,
                 'user_id' => Auth::user()->id,
             ]);
+            $order->menu()->attach($pivotData);
+            $basket->each->delete();
 
-
+            return redirect()->route('orders.show', $order->id );
         }
 
     }
@@ -75,7 +90,10 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+        $order = Order::find($id);
+
+        return view('orders.show', ['order' => $order]);
+
     }
 
     /**

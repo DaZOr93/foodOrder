@@ -6,6 +6,7 @@ use App\Http\Requests\User\UpdateRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -74,7 +75,19 @@ class UserController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        //
+        $user = User::find($id);
+        $data = $request->validated();
+
+        if($data['password'] == null){
+            unset($data['password']);
+
+        } else{
+
+            $data['password'] =Hash::make($request->password);
+        }
+
+        $user->update($data);
+        return redirect()->route('user.index');
     }
 
     /**

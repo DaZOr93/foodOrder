@@ -27,7 +27,7 @@ class AddressController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreReques $request)
+    public function store(StoreRequest $request)
     {
         $data = $request->validated();
         $data['user_id'] = Auth::user()->id;
@@ -75,6 +75,9 @@ class AddressController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $address = Address::find($id);
+        $address->delete();
+
+        return redirect()->back();
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Requests\Menu\UpdateRequest;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
@@ -19,9 +20,14 @@ class MenuController extends Controller
      */
     public function index()
     {
+        $menu = Menu::where('status' ,'active')->get();
+        if(Auth::user()){
+           if(Auth::user()->role_id === 1){
+               $menu = Menu::all();
+           }
+        }
 
         $categories = Category::all();
-        $menu = Menu::all();
 
         return view('index', ['categories' => $categories, 'menu' => $menu]);
     }
@@ -29,7 +35,7 @@ class MenuController extends Controller
     public function category($category){
 
         $categories = Category::all();
-        $menu = Menu::where('category_id' ,$category)->get();
+        $menu = Menu::where('category_id' ,$category)->where('status' ,'active')->get();
 
         return view('index', ['categories' => $categories, 'menu'=>$menu, 'categoryId'=>$category]);
 
