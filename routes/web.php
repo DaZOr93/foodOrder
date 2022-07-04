@@ -21,6 +21,10 @@ use Illuminate\Http\Request;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/{any}', function () {
+    return view('vue');
+})->where('any', '.*');
+
 
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
@@ -138,3 +142,7 @@ Route::group([
     Route::delete('/{address}', [AddressController::class, 'destroy'])->name('destroy');
 });
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
