@@ -32,8 +32,10 @@ Vue.component('header-component', require('./components/HeaderComponent.vue').de
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 import router from "./router";
+import store from "./store";
 
 const app = new Vue({
     el: '#app',
     router,
+    store
 });

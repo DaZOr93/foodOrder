@@ -36,6 +36,8 @@
                 </div>
             </div>
         </div>
+
+
         <div class="row">
             <menu-item-component v-for="menu_item in  filteredMenu"
                                  :picture="menu_item.picture"
@@ -62,6 +64,7 @@ export default {
         menu: [],
         categories: [],
         search: "",
+
 
     }),
     mounted() {
@@ -98,6 +101,7 @@ export default {
         sortByField(event) {
             let field = event.target.value
             let method = event.target.method
+            console.log(event.target.method)
             function byField(field, method) {
                 if(method === 'desc'){
                     return (a, b) => a[field] < b[field] ? 1 : -1;

@@ -34,44 +34,44 @@
         <div class="px-3 py-2 bg-dark text-white">
             <div class="container">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                    <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                    <router-link to="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
                         <svg class="bi me-2" width="40" height="32" role="img" aria-label="Food">
                             <use xlink:href="#food"></use>
                         </svg>
-                    </a>
+                    </router-link>
 
                     <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                         <li>
-                            <a href="/" class="nav-link text-white">
+                            <router-link to="/" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                     <use xlink:href="#grid"></use>
                                 </svg>
                                 Меню
-                            </a>
+                            </router-link>
                         </li>
                         <li>
-                            <a href="#" class="nav-link text-white">
+                            <router-link to="/orders" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                     <use xlink:href="#table"></use>
                                 </svg>
                                 Мои заказы
-                            </a>
+                            </router-link>
                         </li>
                         <li>
-                            <a href="#" class="nav-link text-white">
+                            <router-link to="/profile" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                     <use xlink:href="#people-circle"></use>
                                 </svg>
                                 Профиль
-                            </a>
+                            </router-link>
                         </li>
                         <li>
-                            <a href="#" class="nav-link text-white">
+                            <router-link to="basket" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                     <use xlink:href="#speedometer2"></use>
                                 </svg>
                                 Корзина
-                            </a>
+                            </router-link>
                         </li>
                     </ul>
                     <div class="text-end">
