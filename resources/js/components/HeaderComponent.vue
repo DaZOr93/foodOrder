@@ -66,7 +66,7 @@
                             </router-link>
                         </li>
                         <li>
-                            <router-link to="basket" class="nav-link text-white">
+                            <router-link to="/basket" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                     <use xlink:href="#speedometer2"></use>
                                 </svg>

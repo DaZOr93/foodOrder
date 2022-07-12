@@ -16,8 +16,8 @@
             </div>
 
             <div class="container d-flex justify-content-center align-items-center">
-                <div class="col-3">
-                    <div class="input-group mb-2">
+                <div class="col-3" >
+                    <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">Поиск</div>
                         </div>
@@ -26,13 +26,7 @@
                 </div>
                 <div class="col-5 d-flex flex-wrap justify-content-center align-items-center">
                     <div class="m-lg-1">Сортировка:</div>
-                    <select @change="sortByField($event)" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                        <option selected disabled>Не выбранна</option>
-                        <option value="name" >Название по возрастанию</option>
-                        <option value="name" method="desc">Название по убыванию</option>
-                        <option value="price">Цена по возрастанию</option>
-                        <option value="price" method="desc">Цена по убыванию</option>
-                    </select>
+                    <sort-component  @sort="sortHandler" ></sort-component>
                 </div>
             </div>
         </div>
@@ -54,10 +48,11 @@
 <script>
 import axios from 'axios';
 import MenuItemComponent from "../components/MenuItemComponent";
+import SortComponent from '../components/SortComponent';
 
 export default {
     name: "index",
-    components: {MenuItemComponent},
+    components: {SortComponent, MenuItemComponent},
 
     data: () => ({
         loading: true,
@@ -98,17 +93,17 @@ export default {
                     this.menu = res.data;
                 })
         },
-        sortByField(event) {
-            let field = event.target.value
-            let method = event.target.method
-            console.log(event.target.method)
-            function byField(field, method) {
-                if(method === 'desc'){
+
+        sortHandler(option) {
+            let field = option.field
+            let direction = option.direction
+            function byField(field, direction) {
+                if(direction === 'DESC'){
                     return (a, b) => a[field] < b[field] ? 1 : -1;
                 }
                 return (a, b) => a[field] > b[field] ? 1 : -1;
             }
-            this.menu = this.menu.sort(byField(field, method))
+            this.menu = this.menu.sort(byField(field, direction))
         }
     },
 

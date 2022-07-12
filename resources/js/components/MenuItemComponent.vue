@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { mapActions} from 'vuex';
 export default {
     name: "MenuItemComponent",
     props: {
@@ -42,12 +43,16 @@ export default {
         count: 1,
     }),
     methods: {
+        ...mapActions(["addItemToBasket"]),
         addBasket(id) {
-            console.log(id)
-            console.log(this.count)
 
+           this.addItemToBasket({
+               id: id,
+               quantity: +this.count
+           })
         }
-    }
+    },
+
 }
 </script>
 

@@ -1,8 +1,8 @@
 import Vue from "vue";
 import Vuex from 'vuex'
-import axios from "axios";
-import {commit} from "lodash/seq";
-import moment from 'moment';
+import {axiosInstance} from "../service/api";
+
+
 
 Vue.use(Vuex)
 
@@ -10,36 +10,58 @@ export default new Vuex.Store({
     state: {
         orders: [],
         showOrder: [],
+        basket: [],
+        totalCostBasket: 0,
     },
     getters: {
         stateOrders: state => state.orders,
-        stateShowOrder: state => state.showOrder
+        stateShowOrder: state => state.showOrder,
+        stateBasket: state => state.basket,
+        stateTotalCostBasket: state => state.totalCostBasket
     },
     mutations: {
         setOrders(state, orders) {
             state.orders = orders;
         },
-        serShowOrder(state, showOrder) {
+        setShowOrder(state, showOrder) {
             state.showOrder = showOrder;
+        },
+        setBasket(state, basket) {
+            state.basket = basket;
+        },
+        setTotalCostBasket(state, totalCostBasket) {
+            state.totalCostBasket = totalCostBasket;
         }
+
     },
     actions: {
         loadOrders({commit}) {
-            axios.get('/api/order')
+            return axiosInstance.get('/api/order')
                 .then(res => {
                     commit('setOrders', res.data)
                 })
         },
         loadShowOrder({commit}, id) {
-            axios.get('/api/order/'+id)
+            return axiosInstance.get('/api/order/'+id)
                 .then(res => {
-                    commit('serShowOrder', res.data)
+                    commit('setShowOrder', res.data)
                 })
         },
-        getFormattedDate(date) {
-            console.log(date);
-            return moment(date).format("DD-MM-YYYY")
-        }
+        addItemToBasket(  {commit}, data) {
+            return axiosInstance.post('/api/basket/'+data.id, data)
+                .then((resp) => {
+                    console.log('добавление')
+                })
+        },
+        loadBasket({commit}) {
+            return axiosInstance.get('/api/basket')
+                .then(res => {
+                    commit('setBasket', res.data)
+                   let setTotalCostBasket = res.data.reduce((acc, item) => acc + item.menu.price*item.quantity , 0 )
+                    commit('setTotalCostBasket', setTotalCostBasket)
+                })
+
+        },
 
 
     },

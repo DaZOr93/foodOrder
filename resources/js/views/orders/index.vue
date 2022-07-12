@@ -18,7 +18,7 @@
                     <tbody>
 
                     <tr v-for="(order, index) in stateOrders">
-                        <th scope="row"> {{ index }}</th>
+                        <th scope="row"> {{ index+1 }}</th>
                         <td>
                             <router-link  :to="{ name: 'orderShow', params: { id: order.id } }">
                                 {{ order.id }}
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import axios from "axios";
+
 import {mapGetters, mapMutations, mapActions} from 'vuex';
 import moment from 'moment';
 

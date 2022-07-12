@@ -6,6 +6,8 @@ Vue.use(vueRouter);
 import index from './views/index'
 import orders from './views/orders/index'
 import showOrder from './views/orders/show'
+import basket from "./views/basket";
+
 
 
 const routes = [
@@ -22,7 +24,11 @@ const routes = [
         name: 'orderShow',
         component: showOrder,
         props: true
-    }
+    },
+    {
+        path: '/basket',
+        component: basket
+    },
 ];
 
 export default new vueRouter({
