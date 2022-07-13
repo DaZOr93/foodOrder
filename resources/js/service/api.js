@@ -2,7 +2,9 @@ import axios from 'axios';
 
 
 const config = {
+    withCredentials : true,
     headers: {
+
         "content-type": "application/json",
     }
 }

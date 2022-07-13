@@ -24,7 +24,7 @@ window.Vue = require('vue').default;
 
 
 Vue.component('header-component', require('./components/HeaderComponent.vue').default);
-
+Vue.component('v-notification', require('./components/notifications/v-notification').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

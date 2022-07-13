@@ -42,32 +42,30 @@
            </div>
 
             <p class="lead">Адрес</p>
-            <table class="table table-striped">
+            <table v-if="Object.keys(stateAddress).length !== 0" class="table table-striped">
                 <tbody>
-
-
-                    <tr>
-                        <th scope="row"> $loop->iteration}} </th>
+                    <tr v-for="(address_item, index) in stateAddress">
+                        <th scope="row"> {{index+1}} </th>
                         <td>
-                            <input type="radio" name="address_id" value="$address_item->id}}">
+                            <input type="radio" name="address_id" :value="address_item.id" v-model="selectAddress">
                         </td>
-                        <td> address_item->city}}, $address_item->street}} $address_item->house}}
-                            isset($address_item->apartment))
-                            - '.$address_item->apartment}}
-
+                        <td class="d-flex" >
+                            <div>{{address_item.city}}, {{ address_item.street}} {{address_item.house}}</div>
+                            <div v-if="address_item.apartment">{{'-'+address_item.apartment}}</div>
                         </td>
                     </tr>
-<!--                    @empty-->
-                    <a class="btn btn-primary btn-lg"  role="button">Добавить адрес</a>
-<!--                    @endforelse-->
                 </tbody>
             </table>
+            <div  v-else>
+                <hr>
+                <h4>Адресов нет, добавьте что то</h4>
 
-            <div class="text-red-600 mb-4">Выберите адрес</div>
+            </div>
 
+            <router-link to="/profile" class="btn btn-primary btn-sm"  role="button">Добавить адрес</router-link>
+            <hr>
 
-<!--            @if(!$address->isEmpty())-->
-            <button class="btn btn-primary btn-lg"  type="submit">Оформить заказ</button>
+            <button v-on:click="orderComplete()" class="btn btn-primary btn-lg"  type="button">Оформить заказ</button>
 
 
 
@@ -85,18 +83,24 @@ export default {
     data() {
         return{
             basketCost: 12,
+            selectAddress: '',
         }
     },
     methods: {
-        ...mapActions(["loadBasket"]),
+        ...mapActions(["loadBasket", "loadAddress", "addOrder"]),
+        orderComplete(){
+            this.addOrder({
+                address_id: this.selectAddress,
+            })
 
+        }
     },
     mounted() {
         this.loadBasket()
-        this.totalCost()
+        this.loadAddress()
     },
     computed: {
-        ...mapGetters(['stateBasket', 'stateTotalCostBasket']),
+        ...mapGetters(['stateBasket', 'stateTotalCostBasket' , 'stateAddress']),
 
     }
 }

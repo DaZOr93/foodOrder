@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <div class="row">
 
             <div v-on:click='selectCategory(category.id)' class="col-lg-2 text-center category"
@@ -49,6 +50,7 @@
 import axios from 'axios';
 import MenuItemComponent from "../components/MenuItemComponent";
 import SortComponent from '../components/SortComponent';
+import {mapGetters, mapMutations, mapActions} from 'vuex';
 
 export default {
     name: "index",
@@ -59,6 +61,7 @@ export default {
         menu: [],
         categories: [],
         search: "",
+        messages: [],
 
 
     }),
@@ -75,6 +78,7 @@ export default {
         },
     },
     methods: {
+        ...mapActions(['addNotification']),
         loadMenu() {
             axios.get('/api/menu')
                 .then(res => {
@@ -91,6 +95,8 @@ export default {
             axios.get('/api/menu/category/' + id)
                 .then(res => {
                     this.menu = res.data;
+                    this.addNotification('Категория выбанна');
+
                 })
         },
 

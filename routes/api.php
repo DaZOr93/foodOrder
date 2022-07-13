@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\BasketController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\MenuController;
@@ -41,9 +42,11 @@ Route::group([
 Route::group([
     'as' => 'order.',
     'prefix' => 'order',
+    'middleware'=>'auth:sanctum',
 ], function() {
     Route::get('/', [OrderController::class, 'index'])->name('index');
     Route::get('/{order}', [OrderController::class, 'show'])->name('show');
+    Route::post('/', [OrderController::class, 'store'])->name('store');
 
 });
 
@@ -58,4 +61,16 @@ Route::group([
     Route::post('/{menu_id}/', [BasketController::class, 'add'])->name('add');
     Route::put('/{basket}', [BasketController::class, 'update'])->name('update');
     Route::delete('/{basket}', [BasketController::class, 'destroy'])->name('destroy');
+});
+Route::group([
+    'as' => 'address.',
+    'prefix' => 'address',
+
+], function() {
+    Route::get('/', [AddressController::class, 'index'])->name('index');
+    Route::get('/create', [AddressController::class, 'create'])->name('create');
+    Route::post('/', [AddressController::class, 'store'])->name('store');
+    Route::get('/{address}/edit', [AddressController::class, 'edit'])->name('edit');
+    Route::put('/{address}', [AddressController::class, 'update'])->name('update');
+    Route::delete('/{address}', [AddressController::class, 'destroy'])->name('destroy');
 });

@@ -13,6 +13,7 @@
 <div id="app">
     <header-component></header-component>
     <div class="container">
+        <v-notification></v-notification>
         <router-view></router-view>
     </div>
 

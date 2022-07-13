@@ -12,12 +12,16 @@ export default new Vuex.Store({
         showOrder: [],
         basket: [],
         totalCostBasket: 0,
+        address: [],
+        notification: [],
     },
     getters: {
         stateOrders: state => state.orders,
         stateShowOrder: state => state.showOrder,
         stateBasket: state => state.basket,
-        stateTotalCostBasket: state => state.totalCostBasket
+        stateTotalCostBasket: state => state.totalCostBasket,
+        stateAddress: state => state.address,
+        stateNotification: state => state.notification,
     },
     mutations: {
         setOrders(state, orders) {
@@ -31,10 +35,30 @@ export default new Vuex.Store({
         },
         setTotalCostBasket(state, totalCostBasket) {
             state.totalCostBasket = totalCostBasket;
+        },
+        setAddress(state, address) {
+           state.address = address;
+        },
+        addNotification(state, data){
+            state.notification.unshift(data);
+        },
+        deleteNotification(state){
+            state.notification.splice(state.notification.length - 1, 1)
         }
 
     },
     actions: {
+        addNotification({commit}, message){
+            let timeStamp = Date.now().toLocaleString();
+            let data = {name: message, icon: 'check_circle', id: timeStamp};
+            commit('addNotification', data)
+        },
+        addNotificationError({commit}, message){
+            let timeStamp = Date.now().toLocaleString();
+            let data = {name: message, icon: 'error', id: timeStamp};
+            commit('addNotification', data)
+
+        },
         loadOrders({commit}) {
             return axiosInstance.get('/api/order')
                 .then(res => {
@@ -61,6 +85,18 @@ export default new Vuex.Store({
                     commit('setTotalCostBasket', setTotalCostBasket)
                 })
 
+        },
+        loadAddress({commit}) {
+            return axiosInstance.get('/api/address')
+                .then(res => {
+                    commit('setAddress', res.data)
+                })
+        },
+        addOrder(  {commit}, data) {
+            return axiosInstance.post('/api/order/', data)
+                .then((resp) => {
+                    console.log('добавление')
+                })
         },
 
 
