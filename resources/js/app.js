@@ -25,6 +25,7 @@ window.Vue = require('vue').default;
 
 Vue.component('header-component', require('./components/HeaderComponent.vue').default);
 Vue.component('v-notification', require('./components/notifications/v-notification').default);
+Vue.component('v-popup', require('./components/popup/v-popup').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -33,6 +34,8 @@ Vue.component('v-notification', require('./components/notifications/v-notificati
  */
 import router from "./router";
 import store from "./store";
+import 'material-design-icons-iconfont'
+
 
 const app = new Vue({
     el: '#app',

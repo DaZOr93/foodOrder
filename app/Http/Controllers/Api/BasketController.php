@@ -7,13 +7,14 @@ use App\Http\Requests\Basket\AddRequest;
 use App\Models\Address;
 use App\Models\Basket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BasketController extends Controller
 {
     public function index()
     {
-        $user = 3;
-        $basket = Basket::where('user_id', $user)->with('menu')->get();
+
+        $basket = Basket::where('user_id', Auth::user()->id)->with('menu')->get();
 
         return $basket;
 
@@ -21,16 +22,16 @@ class BasketController extends Controller
     public function add(AddRequest $request, $menu_id)
     {
 
-        $user = 3;
+
         $data = $request->validated();
         $basket_item = Basket::where([
-            ['user_id', $user],
+            ['user_id', Auth::user()->id],
             ['menu_id', $menu_id]
         ])->first();
 
         if ($basket_item == null) {
             $data['menu_id'] = $menu_id;
-            $data['user_id'] = $user;
+            $data['user_id'] = Auth::user()->id;
             Basket::create($data);
         } else {
             $basket_item->update($data);

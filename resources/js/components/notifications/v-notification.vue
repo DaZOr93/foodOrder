@@ -13,10 +13,6 @@
                 <div class="content__text">
                     <span>{{message.name}}</span>
                 </div>
-                <div class="content_buttons">
-                    <button v-if="rightButton.length">{{rightButton}}</button>
-                    <button v-if="leftButton.length">{{leftButton}}</button>
-                </div>
             </div>
         </transition-group>
     </div>
@@ -27,14 +23,7 @@ import {mapGetters, mapMutations, mapActions} from 'vuex';
 export default {
     name: "v-notification",
     props: {
-        rightButton: {
-            type: String,
-            default: ''
-        },
-        leftButton: {
-            type: String,
-            default: ''
-        },
+
         timeout: {
             type: Number,
             default: 3000

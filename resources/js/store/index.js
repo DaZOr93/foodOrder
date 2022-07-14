@@ -14,6 +14,7 @@ export default new Vuex.Store({
         totalCostBasket: 0,
         address: [],
         notification: [],
+        token: null,
     },
     getters: {
         stateOrders: state => state.orders,
@@ -22,6 +23,7 @@ export default new Vuex.Store({
         stateTotalCostBasket: state => state.totalCostBasket,
         stateAddress: state => state.address,
         stateNotification: state => state.notification,
+        stateToken: state => state.token,
     },
     mutations: {
         setOrders(state, orders) {
@@ -44,10 +46,16 @@ export default new Vuex.Store({
         },
         deleteNotification(state){
             state.notification.splice(state.notification.length - 1, 1)
+        },
+        setToken(state) {
+            state.token = localStorage.getItem('x_xsrf_token')
         }
 
     },
     actions: {
+        readToken({commit}){
+            commit('setToken')
+        },
         addNotification({commit}, message){
             let timeStamp = Date.now().toLocaleString();
             let data = {name: message, icon: 'check_circle', id: timeStamp};
@@ -57,6 +65,7 @@ export default new Vuex.Store({
             let timeStamp = Date.now().toLocaleString();
             let data = {name: message, icon: 'error', id: timeStamp};
             commit('addNotification', data)
+            return
 
         },
         loadOrders({commit}) {

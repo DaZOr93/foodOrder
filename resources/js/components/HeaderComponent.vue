@@ -75,10 +75,10 @@
                         </li>
                     </ul>
                     <div class="text-end">
-                        <router-link class="nav-link" to="/login">
-                            <button type="button" class="btn btn-light text-dark me-2">Войти</button>
+                        <router-link v-if="!stateToken"  class="nav-link" to="/login">
+                            <button  type="button" class="btn btn-light text-dark me-2">Войти</button>
                         </router-link>
-                        <a class="nav-link" href="#">
+                        <a v-if="stateToken" class="nav-link" href="#">
                             <button @click.prevent="logout" type="button" class="btn btn-light text-dark me-2">Выход</button>
                         </a>
                 </div>
@@ -95,16 +95,31 @@ import {axiosInstance} from "../service/api";
 import {mapGetters, mapMutations, mapActions} from 'vuex';
 export default {
     name: "HeaderComponent",
+    data() {
+        return {
+
+        }
+    },
+    mounted(){
+        this.readToken()
+    },
     methods: {
-        ...mapActions(["addNotification", "addNotificationError"]),
+        ...mapActions(["addNotification", "addNotificationError", "readToken"]),
+
         logout(){
             return axiosInstance.post('/logout')
                 .then(res=> {
                     this.addNotification('Вы вышли')
+                    localStorage.removeItem('x_xsrf_token')
+                    this.readToken()
                     this.$router.push({name: 'index'})
                 })
         }
     },
+    computed: {
+        ...mapGetters(['stateToken']),
+
+    }
 }
 </script>
 

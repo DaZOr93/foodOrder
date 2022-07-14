@@ -1,5 +1,12 @@
 <template>
     <div class="container">
+        <v-popup
+            v-if="popupVisibleAddress"
+            rightBtnTitle="Добавить адресс"
+
+            @closePopup="closePopup"
+
+        ></v-popup>
         <div class="jumbotron">
             <h2 class="display-4">Корзина</h2>
             <p class="lead">Здесь вы можете, редактировать корзину или и оформить заказ.</p>
@@ -62,7 +69,7 @@
 
             </div>
 
-            <router-link to="/profile" class="btn btn-primary btn-sm"  role="button">Добавить адрес</router-link>
+            <button v-on:click="showPopup()" class="btn btn-primary btn-sm"  role="button">Добавить адрес</button>
             <hr>
 
             <button v-on:click="orderComplete()" class="btn btn-primary btn-lg"  type="button">Оформить заказ</button>
@@ -84,6 +91,7 @@ export default {
         return{
             basketCost: 12,
             selectAddress: '',
+            popupVisibleAddress: false,
         }
     },
     methods: {
@@ -92,8 +100,13 @@ export default {
             this.addOrder({
                 address_id: this.selectAddress,
             })
-
-        }
+        },
+        closePopup(){
+            this.popupVisibleAddress = false
+        },
+        showPopup(){
+            this.popupVisibleAddress = true
+        },
     },
     mounted() {
         this.loadBasket()

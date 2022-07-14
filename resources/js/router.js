@@ -12,37 +12,63 @@ import registration from "./views/registration";
 
 
 
-const routes = [
-    {
-        path: '/',
-        name: 'index',
-        component : index
-    },
-    {
-        path: '/orders',
-        component: orders
-    },
-    {
-        path: '/order/:id',
-        name: 'orderShow',
-        component: showOrder,
-        props: true
-    },
-    {
-        path: '/basket',
-        component: basket
-    },
-    {
-        path: '/login',
-        component: login
-    },
-    {
-        path: '/registration',
-        component: registration
-    }
-];
 
-export default new vueRouter({
+
+const router = new vueRouter({
     mode: "history",
-    routes
+    routes : [
+        {
+            path: '/',
+            name: 'index',
+            component : index
+        },
+        {
+            path: '/orders',
+            component: orders,
+            name : 'orders'
+        },
+        {
+            path: '/order/:id',
+            name: 'orderShow',
+            component: showOrder,
+            props: true
+        },
+        {
+            path: '/basket',
+            component: basket,
+            name: 'basket'
+        },
+        {
+            path: '/login',
+            component: login,
+            name: 'login'
+        },
+        {
+            path: '/registration',
+            component: registration,
+            name: 'registration'
+
+        }
+    ]
 });
+
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem('x_xsrf_token')
+
+    if (!token){
+        if (to.name === 'login'|| to.name === 'registration' || to.name === 'index') {
+            return next()
+        } else next({
+            name: 'login'
+        })
+    }
+    if (to.name === 'login'|| to.name === 'registration') {
+        return next({
+            name: 'index'
+        }
+    )
+    }
+    next()
+})
+
+export default router
