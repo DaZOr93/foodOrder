@@ -2,7 +2,7 @@
     <div class="popup_wrapper" ref="popup_wrapper">
         <div class='v-popup'>
             <div class="v-popup__header">
-                <span>{{popupTitle}}</span>
+                <h5>{{popupTitle}}</h5>
                 <span>
         <i
             class="material-icons"
@@ -16,9 +16,9 @@
                 <slot></slot>
             </div>
             <div class="v-popup__footer">
-                <button class="close_modal" @click="closePopup">Close</button>
+                <button class="btn btn-primary" @click="closePopup">Закрыть</button>
                 <button
-                    class="submit_btn"
+                    class="btn btn-primary"
                     @click="rightBtnAction"
                 >
                     {{rightBtnTitle}}
@@ -93,15 +93,7 @@ export default {
         justify-content: center;
         align-items: center;
     }
-    .submit_btn {
-        padding: 8px;
-        color: #ffffff;
-        background: #26ae68;
-    }
-    .close_modal {
-        padding: 8px;
-        color: #ffffff;
-        background: red;
-    }
+
+
 }
 </style>

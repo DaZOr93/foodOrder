@@ -2,16 +2,47 @@
     <div class="container">
         <v-popup
             v-if="popupVisibleAddress"
-            rightBtnTitle="Добавить адресс"
-
+            rightBtnTitle="Добавить адрес"
+            popupTitle="Добавить адрес"
             @closePopup="closePopup"
-
-        ></v-popup>
+            @rightBtnAction="addAddress"
+        >
+            <div class="row gutters mb-3">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                        <label for="city">Город</label>
+                        <input type="text" class="form-control" name="city" placeholder="Введите город"
+                               v-model="city">
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                        <label for="street">Улица</label>
+                        <input type="text" class="form-control" name="street" placeholder="Введите улицу"
+                               v-model="street">
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                        <label for="house">Дом</label>
+                        <input type="text" class="form-control" name="house" placeholder="Введите номер дома"
+                               v-model="house">
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                        <label for="apartment">Квартира</label>
+                        <input type="text" class="form-control" name="apartment" placeholder="Введите номер квартиры"
+                               v-model="apartment">
+                    </div>
+                </div>
+            </div>
+        </v-popup>
         <div class="jumbotron">
             <h2 class="display-4">Корзина</h2>
             <p class="lead">Здесь вы можете, редактировать корзину или и оформить заказ.</p>
 
-                <table v-if="Object.keys(stateBasket).length !== 0" class="table table-striped">
+            <table v-if="Object.keys(stateBasket).length !== 0" class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">№</th>
@@ -25,12 +56,12 @@
                 <tbody>
 
                 <basket-item-component v-for="(basket_item, index) in stateBasket"
-                    :index = index
-                    :name = basket_item.menu.name
-                    :price = +basket_item.menu.price
-                    :quantity = +basket_item.quantity
-                    :key = index
-                    :menuId = basket_item.menu.id
+                                       :index=index
+                                       :name=basket_item.menu.name
+                                       :price=+basket_item.menu.price
+                                       :quantity=+basket_item.quantity
+                                       :key=index
+                                       :menuId=basket_item.menu.id
 
                 >
                 </basket-item-component>
@@ -38,42 +69,41 @@
                 <tfoot>
                 <tr>
                     <td colspan="4">Всего</td>
-                    <td colspan="2">{{stateTotalCostBasket}} грн</td>
+                    <td colspan="2">{{ stateTotalCostBasket }} грн</td>
                 </tr>
                 </tfoot>
             </table>
-           <div  v-else>
-               <hr>
-               <h4>Товаров нет, добавьте что то</h4>
-               <hr>
-           </div>
+            <div v-else>
+                <hr>
+                <h4>Товаров нет, добавьте что то</h4>
+                <hr>
+            </div>
 
             <p class="lead">Адрес</p>
             <table v-if="Object.keys(stateAddress).length !== 0" class="table table-striped">
                 <tbody>
-                    <tr v-for="(address_item, index) in stateAddress">
-                        <th scope="row"> {{index+1}} </th>
-                        <td>
-                            <input type="radio" name="address_id" :value="address_item.id" v-model="selectAddress">
-                        </td>
-                        <td class="d-flex" >
-                            <div>{{address_item.city}}, {{ address_item.street}} {{address_item.house}}</div>
-                            <div v-if="address_item.apartment">{{'-'+address_item.apartment}}</div>
-                        </td>
-                    </tr>
+                <tr v-for="(address_item, index) in stateAddress">
+                    <th scope="row"> {{ index + 1 }}</th>
+                    <td>
+                        <input type="radio" name="address_id" :value="address_item.id" v-model="selectAddress">
+                    </td>
+                    <td class="d-flex">
+                        <div>{{ address_item.city }}, {{ address_item.street }} {{ address_item.house }}</div>
+                        <div v-if="address_item.apartment">{{ '-' + address_item.apartment }}</div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
-            <div  v-else>
+            <div v-else>
                 <hr>
                 <h4>Адресов нет, добавьте что то</h4>
 
             </div>
 
-            <button v-on:click="showPopup()" class="btn btn-primary btn-sm"  role="button">Добавить адрес</button>
+            <button v-on:click="showPopup()" class="btn btn-primary btn-sm" role="button">Добавить адрес</button>
             <hr>
 
-            <button v-on:click="orderComplete()" class="btn btn-primary btn-lg"  type="button">Оформить заказ</button>
-
+            <button v-on:click="orderComplete()" class="btn btn-primary btn-lg" type="button">Оформить заказ</button>
 
 
         </div>
@@ -88,32 +118,49 @@ export default {
     name: "basket",
     components: {BasketItemComponent},
     data() {
-        return{
+        return {
             basketCost: 12,
             selectAddress: '',
             popupVisibleAddress: false,
+            city: '',
+            street: '',
+            house: '',
+            apartment: '',
         }
     },
     methods: {
-        ...mapActions(["loadBasket", "loadAddress", "addOrder"]),
-        orderComplete(){
+        ...mapActions(["loadBasket", "loadAddress", "addOrder","addAddressActions"]),
+        orderComplete() {
             this.addOrder({
                 address_id: this.selectAddress,
             })
         },
-        closePopup(){
+        closePopup() {
             this.popupVisibleAddress = false
         },
-        showPopup(){
+        showPopup() {
             this.popupVisibleAddress = true
         },
+        addAddress() {
+            this.addAddressActions({
+                city: this.city,
+                street: this.street,
+                house: this.house,
+                apartment: this.apartment
+            })
+
+            this.city = '';
+            this.street = '';
+            this.house = '';
+            this.apartment = '';
+        }
     },
     mounted() {
         this.loadBasket()
         this.loadAddress()
     },
     computed: {
-        ...mapGetters(['stateBasket', 'stateTotalCostBasket' , 'stateAddress']),
+        ...mapGetters(['stateBasket', 'stateTotalCostBasket', 'stateAddress']),
 
     }
 }

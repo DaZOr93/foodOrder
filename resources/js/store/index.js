@@ -53,6 +53,19 @@ export default new Vuex.Store({
 
     },
     actions: {
+        addAddressActions({dispatch}, data) {
+            return axiosInstance.post('/api/address/', data)
+                .then((resp) => {
+                    dispatch('addNotification', 'Адрес добавлен')
+                })
+                .catch(err=>{
+                    let errors = err.response.data.errors
+                    for(let key in errors){
+                        dispatch('addNotificationError',errors[key][0])
+                    }
+                })
+        },
+
         readToken({commit}){
             commit('setToken')
         },
@@ -65,7 +78,7 @@ export default new Vuex.Store({
             let timeStamp = Date.now().toLocaleString();
             let data = {name: message, icon: 'error', id: timeStamp};
             commit('addNotification', data)
-            return
+            return 200;
 
         },
         loadOrders({commit}) {
