@@ -28,5 +28,11 @@ class StoreRequest extends FormRequest
 
         ];
     }
+    public function attributes()
+    {
+        return [
+            'address_id' => 'адрес'
+        ];
+    }
 
 }

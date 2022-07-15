@@ -53,6 +53,7 @@ Route::group([
 Route::group([
     'as' => 'basket.',
     'prefix' => 'basket',
+    'middleware'=>'auth:sanctum',
 ], function() {
     Route::get('/', [BasketController::class, 'index'])->name('index');
     Route::get('/create', [BasketController::class, 'create'])->name('create');

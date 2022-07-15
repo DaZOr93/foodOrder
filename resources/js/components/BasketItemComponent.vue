@@ -47,14 +47,13 @@ export default {
 
     },
     methods: {
-        ...mapActions(["addItemToBasket", "loadBasket", "addNotification"]),
+        ...mapActions(["addItemToBasket", "loadBasket",]),
         async addBasket(menuId) {
 
            await this.addItemToBasket({
                 id: menuId,
                 quantity: +this.count
             })
-            this.addNotification('Обновлено')
             this.loadBasket()
         },
 

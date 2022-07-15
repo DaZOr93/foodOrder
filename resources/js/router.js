@@ -31,7 +31,7 @@ const router = new vueRouter({
             path: '/order/:id',
             name: 'orderShow',
             component: showOrder,
-            props: true
+            props: (route) => ({ id: Number(route.params.id) })
         },
         {
             path: '/basket',

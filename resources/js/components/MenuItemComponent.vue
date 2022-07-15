@@ -43,15 +43,13 @@ export default {
         count: 1,
     }),
     methods: {
-        ...mapActions(["addItemToBasket",'addNotification']),
+        ...mapActions(["addItemToBasket",]),
         addBasket(id) {
 
            this.addItemToBasket({
                id: id,
                quantity: +this.count
            })
-            this.addNotification('Добавленно')
-
         }
     },
 

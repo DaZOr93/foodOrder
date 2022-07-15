@@ -58,7 +58,7 @@ class OrderController extends Controller
             $order->menu()->attach($pivotData);
             $basket->each->delete();
 
-            return redirect()->route('orders.show', $order->id );
+            return $order->id;
         }
 
     }

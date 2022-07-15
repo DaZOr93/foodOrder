@@ -54,7 +54,7 @@ import {mapGetters, mapMutations, mapActions} from 'vuex';
 export default {
     name: "show",
     props: {
-        id: String,
+        id: Number,
     },
     mounted() {
         this.loadShowOrder(this.id)

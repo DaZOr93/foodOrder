@@ -7,7 +7,14 @@
             @closePopup="closePopup"
             @rightBtnAction="addAddress"
         >
-            <div class="row gutters mb-3">
+            <address-editor
+                :apartment = apartment
+                :city = city
+                :house = house
+                :street = street
+                @handlerAddress = updateAddress
+            ></address-editor>
+<!--            <div class="row gutters mb-3">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                     <div class="form-group">
                         <label for="city">Город</label>
@@ -36,7 +43,7 @@
                                v-model="apartment">
                     </div>
                 </div>
-            </div>
+            </div>-->
         </v-popup>
         <div class="jumbotron">
             <h2 class="display-4">Корзина</h2>
@@ -82,16 +89,16 @@
             <p class="lead">Адрес</p>
             <table v-if="Object.keys(stateAddress).length !== 0" class="table table-striped">
                 <tbody>
-                <tr v-for="(address_item, index) in stateAddress">
-                    <th scope="row"> {{ index + 1 }}</th>
-                    <td>
-                        <input type="radio" name="address_id" :value="address_item.id" v-model="selectAddress">
-                    </td>
-                    <td class="d-flex">
-                        <div>{{ address_item.city }}, {{ address_item.street }} {{ address_item.house }}</div>
-                        <div v-if="address_item.apartment">{{ '-' + address_item.apartment }}</div>
-                    </td>
-                </tr>
+                <address-component v-for="(address_item, index) in stateAddress"
+                                   :index = index
+                                   :apartment = address_item.apartment
+                                   :city = address_item.city
+                                   :house = address_item.house
+                                   :id = address_item.id
+                                   :key = address_item.id
+                                   :street = address_item.street
+                                   @select = "selectAddress"
+                ></address-component>
                 </tbody>
             </table>
             <div v-else>
@@ -103,7 +110,7 @@
             <button v-on:click="showPopup()" class="btn btn-primary btn-sm" role="button">Добавить адрес</button>
             <hr>
 
-            <button v-on:click="orderComplete()" class="btn btn-primary btn-lg" type="button">Оформить заказ</button>
+            <button v-if="Object.keys(stateBasket).length !== 0" v-on:click="orderComplete()" class="btn btn-primary btn-lg" type="button">Оформить заказ</button>
 
 
         </div>
@@ -113,14 +120,14 @@
 <script>
 import {mapGetters, mapMutations, mapActions} from 'vuex';
 import BasketItemComponent from "../components/BasketItemComponent";
-
+import AddressComponent from "../components/AddressComponent";
+import AddressEditor from "../components/AddressEditor";
 export default {
     name: "basket",
-    components: {BasketItemComponent},
+    components: {AddressComponent, BasketItemComponent, AddressEditor},
     data() {
         return {
-            basketCost: 12,
-            selectAddress: '',
+            address_id: '',
             popupVisibleAddress: false,
             city: '',
             street: '',
@@ -130,13 +137,29 @@ export default {
     },
     methods: {
         ...mapActions(["loadBasket", "loadAddress", "addOrder","addAddressActions"]),
+        updateAddress(data){
+            this.city = data.city;
+            this.street = data.street;
+            this.house = data.house;
+            this.apartment = data.apartment;
+        },
+        selectAddress(data){
+           this.address_id = data
+        },
         orderComplete() {
             this.addOrder({
-                address_id: this.selectAddress,
+                address_id: this.address_id,
             })
         },
+        clearForm(){
+            this.city = '';
+            this.street = '';
+            this.house = '';
+            this.apartment = '';
+        },
         closePopup() {
-            this.popupVisibleAddress = false
+            this.popupVisibleAddress = false;
+            this.clearForm();
         },
         showPopup() {
             this.popupVisibleAddress = true
@@ -147,12 +170,15 @@ export default {
                 street: this.street,
                 house: this.house,
                 apartment: this.apartment
+            }).then((resp)=>{
+                if(resp.status === 200){
+                    this.clearForm()
+                    this.closePopup();
+                    this.loadAddress()
+                }
             })
 
-            this.city = '';
-            this.street = '';
-            this.house = '';
-            this.apartment = '';
+
         }
     },
     mounted() {

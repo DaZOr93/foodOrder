@@ -25,4 +25,20 @@ class AddressController extends Controller
         Address::create($data);
         return 201;
     }
+    public function destroy($id)
+    {
+        $address = Address::find($id);
+        $address->delete();
+
+        return 200;
+    }
+    public function update(StoreRequest $request, $id)
+    {
+        $address = Address::find($id);
+        $data = $request->validated();
+        $address->update($data);
+
+        return 200;
+
+    }
 }
