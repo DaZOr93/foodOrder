@@ -65,7 +65,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['deleteAddress','updateAddressActions']),
+        ...mapActions(['deleteAddress','updateAddressActions','loadAddress']),
         selectAddress(){
             this.$emit('select', this.id)
         },
@@ -80,10 +80,16 @@ export default {
         },
         updateAddress(){
             this.updateAddressActions( {
+                id: this.id,
                 city: this.newAddressData.city,
                 street: this.newAddressData.street,
                 house: this.newAddressData.house,
                 apartment: this.newAddressData.apartment
+            }).then((resp)=>{
+                if(resp.status === 200){
+                    this.closePopup();
+                    this.loadAddress()
+                }
             })
 
         },

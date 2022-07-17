@@ -65,7 +65,7 @@ export default {
         },
     },
     methods: {
-        handlerAddress () {
+        handlerAddress() {
             this.$emit('handlerAddress', {
                 city: this.newCity,
                 street: this.newStreet,
@@ -74,6 +74,9 @@ export default {
             })
         }
 
+    },
+    mounted() {
+        this.handlerAddress()
     }
 }
 </script>

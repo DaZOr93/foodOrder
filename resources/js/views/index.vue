@@ -62,8 +62,6 @@ export default {
         categories: [],
         search: "",
         messages: [],
-
-
     }),
     mounted() {
         this.loadMenu();

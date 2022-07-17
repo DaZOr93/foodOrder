@@ -10,7 +10,7 @@
             </td>
             <td> {{price*quantity}} </td>
             <td>
-                <button class="btn btn-danger btn-sm" onclick="return confirm('Удалить позицию?')" type="submit">Удалить</button>
+                <button v-on:click="deleteBasket" class="btn btn-danger btn-sm" type="button">Удалить</button>
             </td>
 
         </tr>
@@ -36,6 +36,9 @@ export default {
         index: {
             type : Number,
         },
+        id: {
+            type : Number,
+        },
         price: {
             type: Number,
         },
@@ -47,14 +50,15 @@ export default {
 
     },
     methods: {
-        ...mapActions(["addItemToBasket", "loadBasket",]),
-        async addBasket(menuId) {
-
-           await this.addItemToBasket({
+        ...mapActions(["addItemToBasket", "loadBasket","deleteBasketItem"]),
+        deleteBasket(){
+            this.deleteBasketItem(this.id)
+        },
+        addBasket(menuId) {
+            this.addItemToBasket({
                 id: menuId,
                 quantity: +this.count
             })
-            this.loadBasket()
         },
 
     },

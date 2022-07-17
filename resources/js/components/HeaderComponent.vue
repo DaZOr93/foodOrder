@@ -50,7 +50,7 @@
                             </router-link>
                         </li>
                         <li>
-                            <router-link to="/orders" class="nav-link text-white">
+                            <router-link v-if="stateToken" to="/orders" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                     <use xlink:href="#table"></use>
                                 </svg>
@@ -58,7 +58,7 @@
                             </router-link>
                         </li>
                         <li>
-                            <router-link to="/profile" class="nav-link text-white">
+                            <router-link v-if="stateToken" to="/profile" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                     <use xlink:href="#people-circle"></use>
                                 </svg>
@@ -66,7 +66,7 @@
                             </router-link>
                         </li>
                         <li>
-                            <router-link to="/basket" class="nav-link text-white">
+                            <router-link v-if="stateToken" to="/basket" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                     <use xlink:href="#speedometer2"></use>
                                 </svg>
@@ -78,7 +78,7 @@
                         <router-link v-if="!stateToken"  class="nav-link" to="/login">
                             <button  type="button" class="btn btn-light text-dark me-2">Войти</button>
                         </router-link>
-                        <a v-if="stateToken" class="nav-link" href="#">
+                        <a v-if="stateToken" class="nav-link" >
                             <button @click.prevent="logout" type="button" class="btn btn-light text-dark me-2">Выход</button>
                         </a>
                 </div>
@@ -100,11 +100,9 @@ export default {
 
         }
     },
-    mounted(){
-        this.readToken()
-    },
+
     methods: {
-        ...mapActions(["addNotification", "addNotificationError", "readToken"]),
+        ...mapActions(["addNotification", "addNotificationError", "readToken","readUser"]),
 
         logout(){
             return axiosInstance.post('/logout')
@@ -112,6 +110,7 @@ export default {
                     this.addNotification('Вы вышли')
                     localStorage.removeItem('x_xsrf_token')
                     this.readToken()
+                    this.readUser()
                     this.$router.push({name: 'index'})
                 })
         }

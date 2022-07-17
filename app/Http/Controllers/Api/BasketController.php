@@ -39,4 +39,12 @@ class BasketController extends Controller
 
         return 201;
     }
+    public function destroy($id)
+    {
+        $basket_item = Basket::find($id);
+        if($basket_item->user_id == Auth::user()->id){
+            $basket_item->delete();
+        }
+        return 201;
+    }
 }

@@ -4,7 +4,6 @@ import router from "../router";
 import {axiosInstance} from "../service/api";
 
 
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -16,6 +15,8 @@ export default new Vuex.Store({
         address: [],
         notification: [],
         token: null,
+        profile: [],
+        user: [],
     },
     getters: {
         stateOrders: state => state.orders,
@@ -25,6 +26,8 @@ export default new Vuex.Store({
         stateAddress: state => state.address,
         stateNotification: state => state.notification,
         stateToken: state => state.token,
+        stateProfile: state => state.profile,
+        stateUser: state => state.user,
     },
     mutations: {
         setOrders(state, orders) {
@@ -40,23 +43,39 @@ export default new Vuex.Store({
             state.totalCostBasket = totalCostBasket;
         },
         setAddress(state, address) {
-           state.address = address;
+            state.address = address;
         },
-        addNotification(state, data){
+        addNotification(state, data) {
             state.notification.unshift(data);
         },
-        deleteNotification(state){
+        deleteNotification(state) {
             state.notification.splice(state.notification.length - 1, 1)
         },
         setToken(state) {
             state.token = localStorage.getItem('x_xsrf_token')
+        },
+        setProfile(state, profile) {
+            state.profile = profile
+        },
+        setUser(state, user) {
+            state.user = user
         }
 
     },
     actions: {
-        deleteAddress({dispatch}, id){
-            if(confirm("Удалить адрес")){
-                return axiosInstance.delete('/api/address/'+id)
+        deleteBasketItem({dispatch}, id) {
+            if (confirm("Удалить позицию")) {
+                return axiosInstance.delete('/api/basket/' + id)
+                    .then((resp) => {
+                        dispatch('addNotification', 'Позиция удалена')
+                        dispatch('loadBasket')
+                        return resp
+                    })
+            }
+        },
+        deleteAddress({dispatch}, id) {
+            if (confirm("Удалить адрес")) {
+                return axiosInstance.delete('/api/address/' + id)
                     .then((resp) => {
                         dispatch('addNotification', 'Адрес удален')
                         dispatch('loadAddress')
@@ -70,57 +89,61 @@ export default new Vuex.Store({
                     dispatch('addNotification', 'Адрес добавлен')
                     return resp
                 })
-                .catch(err=>{
+                .catch(err => {
                     let errors = err.response.data.errors
-                    for(let key in errors){
-                        dispatch('addNotificationError',errors[key][0])
+                    for (let key in errors) {
+                        dispatch('addNotificationError', errors[key][0])
                     }
                     return err.response
                 })
         },
-        updateAddressActions({dispatch}, id, data) {
-            return axiosInstance.put('/api/address/'+id, data)
+        updateAddressActions({dispatch}, data) {
+            return axiosInstance.put('/api/address/' + data.id, data)
                 .then((resp) => {
                     dispatch('addNotification', 'Адрес обновлен')
                     return resp
                 })
-                .catch(err=>{
+                .catch(err => {
                     let errors = err.response.data.errors
-                    for(let key in errors){
-                        dispatch('addNotificationError',errors[key][0])
+                    for (let key in errors) {
+                        dispatch('addNotificationError', errors[key][0])
                     }
                     return err.response
                 })
         },
+        readUser({commit, dispatch, getters}) {
+            if (getters.stateToken) {
+                return axiosInstance.get('/api/profile')
+                    .then(res => {
+                        commit('setUser', res.data)
 
-        readToken({commit}){
+                    })
+                    .catch(err => {
+
+                    })
+            } else {
+                commit('setUser', [])
+            }
+        },
+
+        readToken({commit}) {
             commit('setToken')
         },
-        unauthorized({dispatch}, err){
-            if(err.response.status === 401){
+        unauthorized({dispatch}, err) {
+            if (err.response.status === 401) {
                 localStorage.removeItem('x_xsrf_token')
                 dispatch('readToken')
                 router.push({name: 'login'})
             }
         },
-        addNotification({commit}, message){
-            function getRandomInt(min, max) {
-                min = Math.ceil(min);
-                max = Math.floor(max);
-                return Math.floor(Math.random() * (max - min)) + min;
-            }
-            let timeStamp = getRandomInt(1,100) * Date.now().toLocaleString();
-            let data = {name: message, icon: 'check_circle', id: timeStamp};
+
+        addNotification({commit}, message) {
+            let data = {name: message, icon: 'check_circle', id: Math.random() * Date.now()};
             commit('addNotification', data)
         },
-        addNotificationError({commit}, message){
-            function getRandomInt(min, max) {
-                min = Math.ceil(min);
-                max = Math.floor(max);
-                return Math.floor(Math.random() * (max - min)) + min;
-            }
-            let timeStamp = getRandomInt(1,100)*Date.now();
-            let data = {name: message, icon: 'error', id: timeStamp};
+        addNotificationError({commit}, message) {
+
+            let data = {name: message, icon: 'error', id: Math.random() * Date.now()};
             commit('addNotification', data)
             return 200;
 
@@ -130,35 +153,63 @@ export default new Vuex.Store({
                 .then(res => {
                     commit('setOrders', res.data)
                 })
-                .catch(err=>{
+                .catch(err => {
                     dispatch('unauthorized', err)
+                })
+        },
+        loadProfile({commit, dispatch}) {
+            return axiosInstance.get('/api/profile')
+                .then(res => {
+                    commit('setProfile', res.data)
+                    return res
+                })
+                .catch(err => {
+                    dispatch('unauthorized', err)
+                })
+        },
+        updateProfile({dispatch}, data) {
+            return axiosInstance.put('/api/profile/', data)
+                .then((resp) => {
+                    dispatch('addNotification', 'Профиль обновлен')
+
+                }).catch(err => {
+                    dispatch('unauthorized', err)
+                    let errors = err.response.data.errors
+                    for (let key in errors) {
+                        dispatch('addNotificationError', errors[key][0])
+                    }
                 })
         },
         loadShowOrder({commit, dispatch}, id) {
-            return axiosInstance.get('/api/order/'+id)
+            return axiosInstance.get('/api/order/' + id)
                 .then(res => {
                     commit('setShowOrder', res.data)
                 })
-                .catch(err=>{
+                .catch(err => {
                     dispatch('unauthorized', err)
                 })
         },
-        addItemToBasket(  {dispatch}, data) {
-            return axiosInstance.post('/api/basket/'+data.id, data)
+        addItemToBasket({dispatch}, data) {
+            return axiosInstance.post('/api/basket/' + data.id, data)
                 .then((resp) => {
                     dispatch('addNotification', 'Добавленно')
-                }).catch(err=>{
+                    dispatch("loadBasket")
+                }).catch(err => {
                     dispatch('unauthorized', err)
+                    let errors = err.response.data.errors
+                    for (let key in errors) {
+                        dispatch('addNotificationError', errors[key][0])
+                    }
                 })
         },
         loadBasket({commit, dispatch}) {
             return axiosInstance.get('/api/basket')
                 .then(res => {
                     commit('setBasket', res.data)
-                   let setTotalCostBasket = res.data.reduce((acc, item) => acc + item.menu.price*item.quantity , 0 )
+                    let setTotalCostBasket = res.data.reduce((acc, item) => acc + item.menu.price * item.quantity, 0)
                     commit('setTotalCostBasket', setTotalCostBasket)
                 })
-                .catch(err=>{
+                .catch(err => {
                     dispatch('unauthorized', err)
                 })
 
@@ -168,29 +219,27 @@ export default new Vuex.Store({
                 .then(res => {
                     commit('setAddress', res.data)
                 })
-                .catch(err=>{
+                .catch(err => {
                     dispatch('unauthorized', err)
                 })
         },
-        addOrder(  {commit, dispatch}, data) {
+        addOrder({commit, dispatch}, data) {
             return axiosInstance.post('/api/order/', data)
                 .then((resp) => {
                     dispatch('addNotification', 'Заказ добавлен')
-                    router.push({name: 'orderShow', params: { id: resp.data}})
+                    router.push({name: 'orderShow', params: {id: resp.data}})
                 })
-                .catch(err=>{
+                .catch(err => {
                     dispatch('unauthorized', err)
                     let errors = err.response.data.errors
-                    for(let key in errors){
-                        dispatch('addNotificationError',errors[key][0])
+                    for (let key in errors) {
+                        dispatch('addNotificationError', errors[key][0])
                     }
                 })
         },
 
 
     },
-    modules: {
-
-    }
+    modules: {}
 
 })

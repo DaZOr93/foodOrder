@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\MenuController;
 
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -73,4 +74,12 @@ Route::group([
     Route::get('/{address}/edit', [AddressController::class, 'edit'])->name('edit');
     Route::put('/{address}', [AddressController::class, 'update'])->name('update');
     Route::delete('/{address}', [AddressController::class, 'destroy'])->name('destroy');
+});
+Route::group([
+    'as' => 'profile.',
+    'prefix' => 'profile',
+    'middleware'=>'auth:sanctum',
+], function() {
+    Route::get('/', [ProfileController::class, 'index'])->name('index');
+    Route::put('/', [ProfileController::class, 'update'])->name('update');
 });

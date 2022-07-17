@@ -9,6 +9,7 @@ import showOrder from './views/orders/show'
 import basket from "./views/basket";
 import login from "./views/login";
 import registration from "./views/registration";
+import profile from "./views/profile";
 
 
 
@@ -47,6 +48,12 @@ const router = new vueRouter({
             path: '/registration',
             component: registration,
             name: 'registration'
+
+        },
+        {
+            path: '/profile',
+            component: profile,
+            name: 'profile'
 
         }
     ]

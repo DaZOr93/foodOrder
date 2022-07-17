@@ -32,7 +32,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(["addNotification", "addNotificationError",'readToken']),
+        ...mapActions(["addNotification", "addNotificationError","readToken","readUser"]),
         login() {
             return axiosInstance.get('/sanctum/csrf-cookie').then((resp) => {
                 axiosInstance.post('/login', {email: this.email, password: this.password})
@@ -40,6 +40,7 @@ export default {
                         this.addNotification('Вы авторизоваись')
                         localStorage.setItem('x_xsrf_token', resp.config.headers['X-XSRF-TOKEN'])
                         this.readToken()
+                        this.readUser()
                         this.$router.push({name: 'index'})
                     })
                     .catch(err=>{

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Profile\UpdateRequest;
 use App\Models\Address;
 use App\Models\User;
@@ -11,19 +12,17 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-
     public function index()
     {
         $user = Auth::user();
-        $address = Address::where('user_id',Auth::user()->id)->get();
-        return view('profile.index', ['user' => $user,'address'=>$address]);
+
+        return $user;
     }
 
-    public function update(UpdateRequest $request, $id)
+    public function update(UpdateRequest $request)
     {
-        $user = User::find($id);
+        $user = User::find(Auth::user()->id);
         $data = $request->validated();
-return $data;
         if($data['password'] == null){
             unset($data['password']);
 
@@ -34,8 +33,7 @@ return $data;
 
         $user->update($data);
 
-        return redirect()->route('profile.index');
+        return 200;
 
     }
-
 }

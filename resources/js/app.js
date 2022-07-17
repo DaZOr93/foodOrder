@@ -35,10 +35,17 @@ Vue.component('v-popup', require('./components/popup/v-popup').default);
 import router from "./router";
 import store from "./store";
 import 'material-design-icons-iconfont'
-
+import {mapGetters, mapMutations, mapActions} from 'vuex';
 
 const app = new Vue({
     el: '#app',
     router,
-    store
+    store,
+    methods: {
+        ...mapActions(["readToken","readUser"]),
+    },
+    mounted(){
+        this.readToken()
+        this.readUser()
+    },
 });

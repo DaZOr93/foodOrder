@@ -6,7 +6,10 @@
             <p class="card-text"> {{ name }}</p>
             <p class="category_menu card-text">{{ category }} </p>
             <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
+                <div v-if="stateUser['role_id'] === 1">
+                    <button v-on:click="readItem(id)" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</button>
+                </div>
+                <div v-else class="btn-group">
                     <input type="number"  v-model="count" name="quantity" max="20" min="1" class="form-control quantity" >
                     <button v-on:click="addBasket(id)" type="button" class="btn btn-sm btn-outline-secondary">Добавить в корзину</button>
                 </div>
@@ -19,7 +22,7 @@
 </template>
 
 <script>
-import { mapActions} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 export default {
     name: "MenuItemComponent",
     props: {
@@ -50,8 +53,16 @@ export default {
                id: id,
                quantity: +this.count
            })
+        },
+        readItem(){
+
         }
+
     },
+    computed: {
+        ...mapGetters(['stateUser']),
+
+    }
 
 }
 </script>

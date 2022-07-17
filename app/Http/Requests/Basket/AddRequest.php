@@ -24,15 +24,15 @@ class AddRequest extends FormRequest
     public function rules()
     {
         return [
-            'quantity'=>['required', 'integer', 'min:1','max:2000'],
+            'quantity'=>['required', 'integer', 'min:1','max:20'],
         ];
     }
     public function messages()
     {
         return [
-            'min' => 'Минимум :min символа',
+            'min' => 'Минимум 1 единица',
             'required' => 'Поле обязательно для заполнения',
-            'max' => 'Максимум :max символа',
+            'max' => 'Максимум 20 едениц',
             'integer'=>'Поле должно быть число',
         ];
     }
