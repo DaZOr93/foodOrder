@@ -10,11 +10,9 @@ import basket from "./views/basket";
 import login from "./views/login";
 import registration from "./views/registration";
 import profile from "./views/profile";
-
-
-
-
-
+import menuItemEdit from "./views/dashboard/menuItemEdit";
+import menuItemAdd from "./views/dashboard/menuItemAdd";
+import categories from "./views/dashboard/categories";
 const router = new vueRouter({
     mode: "history",
     routes : [
@@ -55,7 +53,25 @@ const router = new vueRouter({
             component: profile,
             name: 'profile'
 
-        }
+        },
+        {
+            path: '/dashboard/menu/edit/:id',
+            name: 'menuItemEdit',
+            component: menuItemEdit,
+            props: (route) => ({ id: Number(route.params.id) })
+        },
+        {
+            path: '/dashboard/menu/add',
+            name: 'menuItemAdd',
+            component: menuItemAdd,
+
+        },
+        {
+            path: '/dashboard/categories',
+            name: 'categories',
+            component: categories,
+
+        },
     ]
 });
 

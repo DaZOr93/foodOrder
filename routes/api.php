@@ -31,13 +31,20 @@ Route::group([
 ], function() {
     Route::get('/', [MenuController::class, 'index'])->name('index');
     Route::get('/category/{category}', [MenuController::class, 'category'])->name('index');
-
+    Route::get('/{menu}', [MenuController::class, 'edit'])->name('edit')->middleware(['role:1,2']);
+    Route::post('/update/{menu}', [MenuController::class, 'update'])->name('update')->middleware(['role:1,2']);
+    Route::post('/add', [MenuController::class, 'store'])->name('store')->middleware(['role:1,2']);
+    Route::delete('/{menu}', [MenuController::class, 'destroy'])->name('destroy')->middleware(['role:1,2']);
 });
 Route::group([
     'as' => 'category.',
     'prefix' => 'category',
 ], function() {
     Route::get('/', [CategoryController::class, 'index'])->name('index');
+    Route::get('/{category}', [CategoryController::class, 'edit'])->name('edit')->middleware(['role:1,2']);
+    Route::post('/update/{category}', [CategoryController::class, 'update'])->name('update')->middleware(['role:1,2']);
+    Route::post('/add', [CategoryController::class, 'store'])->name('store')->middleware(['role:1,2']);
+    Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy')->middleware(['role:1,2']);
 
 });
 Route::group([

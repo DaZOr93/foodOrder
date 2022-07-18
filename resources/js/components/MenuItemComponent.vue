@@ -7,7 +7,8 @@
             <p class="category_menu card-text">{{ category }} </p>
             <div class="d-flex justify-content-between align-items-center">
                 <div v-if="stateUser['role_id'] === 1">
-                    <button v-on:click="readItem(id)" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</button>
+                    <router-link :to="{ name: 'menuItemEdit', params: { id: id } }" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</router-link>
+                    <button v-on:click="deleteItem" type="button" class="btn btn-sm btn-outline-secondary">Удалить</button>
                 </div>
                 <div v-else class="btn-group">
                     <input type="number"  v-model="count" name="quantity" max="20" min="1" class="form-control quantity" >
@@ -54,8 +55,8 @@ export default {
                quantity: +this.count
            })
         },
-        readItem(){
-
+        deleteItem(){
+            this.$emit('deleteItem', this.id)
         }
 
     },

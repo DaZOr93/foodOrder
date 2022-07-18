@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from 'vuex'
 import router from "../router";
 import {axiosInstance} from "../service/api";
+import axios from "axios";
 
 
 Vue.use(Vuex)
@@ -17,6 +18,10 @@ export default new Vuex.Store({
         token: null,
         profile: [],
         user: [],
+        menuItem: {},
+        categoryItem: {},
+        categories: [],
+        menu: {},
     },
     getters: {
         stateOrders: state => state.orders,
@@ -28,6 +33,10 @@ export default new Vuex.Store({
         stateToken: state => state.token,
         stateProfile: state => state.profile,
         stateUser: state => state.user,
+        stateMenuItem: state => state.menuItem,
+        stateCategories: state => state.categories,
+        stateCategoryItem: state => state.categoryItem,
+        stateMenu: state => state.menu,
     },
     mutations: {
         setOrders(state, orders) {
@@ -59,10 +68,34 @@ export default new Vuex.Store({
         },
         setUser(state, user) {
             state.user = user
-        }
+        },
+        setMenuItem(state, menuItem) {
+            state.menuItem = menuItem
+        },
+        setCategories(state, categories) {
+            state.categories = categories
+        },
+        setCategoryItem(state, menuCategory) {
+            state.menuCategory = menuCategory
+        },
+        setMenu(state, menu) {
+            state.menu = menu
+        },
 
     },
     actions: {
+        loadMenu({commit}) {
+            return axios.get('/api/menu')
+                .then(res => {
+                    commit('setMenu', res.data);
+                })
+        },
+        loadCategories({commit}) {
+            return axios.get('/api/category')
+                .then(res => {
+                    commit('setCategories', res.data);
+                })
+        },
         deleteBasketItem({dispatch}, id) {
             if (confirm("Удалить позицию")) {
                 return axiosInstance.delete('/api/basket/' + id)
@@ -72,6 +105,15 @@ export default new Vuex.Store({
                         return resp
                     })
             }
+        },
+        loadAddress({commit, dispatch}) {
+            return axiosInstance.get('/api/address')
+                .then(res => {
+                    commit('setAddress', res.data)
+                })
+                .catch(err => {
+                    dispatch('unauthorized', err)
+                })
         },
         deleteAddress({dispatch}, id) {
             if (confirm("Удалить адрес")) {
@@ -214,15 +256,6 @@ export default new Vuex.Store({
                 })
 
         },
-        loadAddress({commit, dispatch}) {
-            return axiosInstance.get('/api/address')
-                .then(res => {
-                    commit('setAddress', res.data)
-                })
-                .catch(err => {
-                    dispatch('unauthorized', err)
-                })
-        },
         addOrder({commit, dispatch}, data) {
             return axiosInstance.post('/api/order/', data)
                 .then((resp) => {
@@ -236,6 +269,104 @@ export default new Vuex.Store({
                         dispatch('addNotificationError', errors[key][0])
                     }
                 })
+        },
+        loadMenuItem({commit, dispatch}, id) {
+            return axiosInstance.get('/api/menu/' + id)
+                .then(res => {
+                    commit('setMenuItem', res.data)
+                })
+                .catch(err => {
+                    dispatch('unauthorized', err)
+                })
+        },
+        updateMenuItem({dispatch}, data) {
+            return axiosInstance.post('/api/menu/update/' + data.get('id'), data)
+                .then((resp) => {
+                    dispatch('addNotification', 'Позиция меню обновлена');
+                    dispatch('loadMenuItem', data.get('id'))
+
+                    return resp
+                })
+                .catch(err => {
+                    let errors = err.response.data.errors
+                    for (let key in errors) {
+                        dispatch('addNotificationError', errors[key][0])
+                    }
+                    return err.response
+                })
+        },
+        addMenuItem({dispatch}, data) {
+            return axiosInstance.post('/api/menu/add/', data)
+                .then((resp) => {
+                    dispatch('addNotification', 'Позиция меню добавлена');
+                    return resp
+                })
+                .catch(err => {
+                    let errors = err.response.data.errors
+                    for (let key in errors) {
+                        dispatch('addNotificationError', errors[key][0])
+                    }
+                    return err.response
+                })
+        },
+        deleteMenuItem({dispatch}, id) {
+            if (confirm("Удалить позицию меню")) {
+                return axiosInstance.delete('/api/menu/' + id)
+                    .then((resp) => {
+                        dispatch('addNotification', 'Позиция меню удален')
+                        dispatch('loadMenu')
+                        return resp
+                    })
+            }
+        },
+        loadCategoryItem({commit, dispatch}, id) {
+            return axiosInstance.get('/api/category/' + id)
+                .then(res => {
+                    commit('setCategoryItem', res.data)
+                })
+                .catch(err => {
+                    dispatch('unauthorized', err)
+                })
+        },
+        updateCategoryItem({dispatch}, data) {
+            return axiosInstance.post('/api/category/update/' + data.get('id'), data)
+                .then((resp) => {
+                    dispatch('addNotification', 'Категория обновлена');
+                    dispatch('loadCategoryItem', data.get('id'))
+
+                    return resp
+                })
+                .catch(err => {
+                    let errors = err.response.data.errors
+                    for (let key in errors) {
+                        dispatch('addNotificationError', errors[key][0])
+                    }
+                    return err.response
+                })
+        },
+        addCategoryItem({dispatch}, data) {
+            return axiosInstance.post('/api/update/add/', data)
+                .then((resp) => {
+                    dispatch('addNotification', 'Категория добавлена');
+                    return resp
+                })
+                .catch(err => {
+                    let errors = err.response.data.errors
+                    for (let key in errors) {
+                        dispatch('addNotificationError', errors[key][0])
+                    }
+                    return err.response
+                })
+        },
+        deleteCategoryItem({dispatch}, id) {
+            if (confirm("Удалить позицию меню")) {
+                return axiosInstance.delete('/api/category/' + id)
+                    .then((resp) => {
+                        dispatch('addNotification', 'Позиция меню удален')
+                        dispatch('loadCategories')
+                        return resp
+                    })
+            }
         },
 
 
