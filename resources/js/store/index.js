@@ -75,8 +75,8 @@ export default new Vuex.Store({
         setCategories(state, categories) {
             state.categories = categories
         },
-        setCategoryItem(state, menuCategory) {
-            state.menuCategory = menuCategory
+        setCategoryItem(state, categoryItem) {
+            state.categoryItem = categoryItem
         },
         setMenu(state, menu) {
             state.menu = menu
@@ -345,7 +345,7 @@ export default new Vuex.Store({
                 })
         },
         addCategoryItem({dispatch}, data) {
-            return axiosInstance.post('/api/update/add/', data)
+            return axiosInstance.post('/api/category/add/', data)
                 .then((resp) => {
                     dispatch('addNotification', 'Категория добавлена');
                     return resp
@@ -362,7 +362,7 @@ export default new Vuex.Store({
             if (confirm("Удалить позицию меню")) {
                 return axiosInstance.delete('/api/category/' + id)
                     .then((resp) => {
-                        dispatch('addNotification', 'Позиция меню удален')
+                        dispatch('addNotification', 'Категория удален')
                         dispatch('loadCategories')
                         return resp
                     })

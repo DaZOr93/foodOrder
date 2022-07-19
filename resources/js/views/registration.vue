@@ -36,7 +36,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(["addNotification", "addNotificationError","readToken"]),
+        ...mapActions(["addNotification", "addNotificationError","readToken","readUser"]),
         registration() {
             return axiosInstance.get('/sanctum/csrf-cookie').then((resp) => {
                 axiosInstance.post('/register', {
@@ -50,6 +50,7 @@ export default {
                         this.addNotification('Вы зарегистрировались')
                         localStorage.setItem('x_xsrf_token', resp.config.headers['X-XSRF-TOKEN'])
                         this.readToken()
+                        this.readUser()
                         this.$router.push({name: 'index'})
                     })
                     .catch(err=>{

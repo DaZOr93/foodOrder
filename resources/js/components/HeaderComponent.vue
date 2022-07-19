@@ -49,24 +49,32 @@
                                 Меню
                             </router-link>
                         </li>
-                        <li>
-                            <router-link v-if="stateToken" to="/orders" class="nav-link text-white">
+                        <li v-if="stateUser['role_id'] === 3">
+                            <router-link  to="/orders" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                     <use xlink:href="#table"></use>
                                 </svg>
                                 Мои заказы
                             </router-link>
                         </li>
-                        <li>
-                            <router-link v-if="stateToken" to="/profile" class="nav-link text-white">
+                        <li v-if="stateUser['role_id'] === 1">
+                            <router-link  to="/orders" class="nav-link text-white">
+                                <svg class="bi d-block mx-auto mb-1" width="24" height="24">
+                                    <use xlink:href="#table"></use>
+                                </svg>
+                                Все заказы
+                            </router-link>
+                        </li>
+                        <li v-if="stateUser['role_id'] === 3">
+                            <router-link  to="/profile" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                     <use xlink:href="#people-circle"></use>
                                 </svg>
-                                Профиль
+                                {{stateUser.name}}
                             </router-link>
                         </li>
-                        <li>
-                            <router-link v-if="stateToken" to="/basket" class="nav-link text-white">
+                        <li v-if="stateUser['role_id'] === 3">
+                            <router-link to="/basket" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                     <use xlink:href="#speedometer2"></use>
                                 </svg>
@@ -116,7 +124,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['stateToken']),
+        ...mapGetters(['stateToken','stateUser']),
 
     }
 }

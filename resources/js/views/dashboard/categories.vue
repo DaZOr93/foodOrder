@@ -3,7 +3,7 @@
         <div class="jumbotron">
             <h2 class="display-4">Список категорий</h2>
             <p class="lead">Здесь вы можете добавлять, редактировать и удалять категории.</p>
-            <a class="btn btn-primary btn-lg"  role="button">Добавить категорию</a>
+            <router-link :to="{name: 'categoryAdd'}" class="btn btn-primary btn-lg"  role="button">Добавить категорию</router-link>
         </div>
 
         <table class="table table-striped">
@@ -22,8 +22,8 @@
                 <td> {{category.name}} </td>
                 <td> <img class="rounded-circle category" :src="`../${category.picture}`" alt="Generic placeholder image" width="140" height="140"></td>
                 <td>
-                    <a class="btn btn-primary mt-3 mb-3 btn-sm" >Редактировать</a>
-                        <button class="btn btn-danger btn-sm" onclick="return confirm('Удалить категорию?')" type="submit">Удалить</button>
+                    <router-link :to="{ name: 'categoryEdit', params: { id: category.id } }" class="btn btn-primary mt-3 mb-3 btn-sm" >Редактировать</router-link>
+                        <button  v-on:click="deleteCategoryItem(category.id)"class="btn btn-danger btn-sm" >Удалить</button>
                 </td>
             </tr>
             </tbody>
@@ -39,7 +39,7 @@ export default {
       this.loadCategories()
     },
     methods: {
-        ...mapActions(['loadCategories'])
+        ...mapActions(['loadCategories','deleteCategoryItem'])
     },
     computed: {
         ...mapGetters(['stateCategories'])

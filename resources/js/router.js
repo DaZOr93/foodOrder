@@ -13,6 +13,8 @@ import profile from "./views/profile";
 import menuItemEdit from "./views/dashboard/menuItemEdit";
 import menuItemAdd from "./views/dashboard/menuItemAdd";
 import categories from "./views/dashboard/categories";
+import categoryEdit from "./views/dashboard/categoryEdit";
+import categoryAdd from "./views/dashboard/categoryAdd";
 const router = new vueRouter({
     mode: "history",
     routes : [
@@ -70,6 +72,18 @@ const router = new vueRouter({
             path: '/dashboard/categories',
             name: 'categories',
             component: categories,
+
+        },
+        {
+          path: '/dashboard/category/edit/:id',
+          name: 'categoryEdit',
+          component: categoryEdit,
+            props: (route) => ({ id: Number(route.params.id) })
+        },
+        {
+            path: '/dashboard/category/add',
+            name: 'categoryAdd',
+            component: categoryAdd,
 
         },
     ]

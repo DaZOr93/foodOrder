@@ -4,7 +4,8 @@
             <div class="col-sm-12 col-md-6">
                 <div class="form-group mb-4">
                     <label for="name">Название блюда</label>
-                    <input class="form-control" name="name" type="text" v-model="stateMenuItem.name" id="name">
+                    <input class="form-control" name="name" type="text" v-model="stateMenuItem.name"
+                           id="name">
                 </div>
                 <div class="form-group mb-4">
                     <label for="category_id">Категория</label>
@@ -61,7 +62,12 @@ export default {
         stateMenuItem: {
             type: Object,
             default() {
-                return {}
+                return {
+                    name: '',
+                    description: '',
+                    price: null,
+
+                }
             }
         },
         rightBtn: {
