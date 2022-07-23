@@ -18,7 +18,7 @@
         </div>
         <div class="px-3 py-2 border-bottom border-top mb-3">
             <div class="container d-flex flex-wrap justify-content-center">
-                <h4>Меню</h4>
+                <h4 v-on:click="loadMenu">Меню</h4>
                 <router-link to="/dashboard/menu/add" v-if="stateUser['role_id'] === 1" class="category_edit" >Доб.</router-link>
 
             </div>
@@ -40,7 +40,7 @@
         </div>
 
 
-        <div class="row">
+        <div class="row ">
             <menu-item-component v-for="menu_item in  filteredMenu"
                                  :picture="menu_item.picture"
                                  :name="menu_item.name"
@@ -58,7 +58,7 @@
 import axios from 'axios';
 import MenuItemComponent from "../components/MenuItemComponent";
 import SortComponent from '../components/SortComponent';
-import {mapGetters, mapMutations, mapActions} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 
 export default {
     name: "index",

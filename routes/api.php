@@ -55,6 +55,7 @@ Route::group([
     Route::get('/', [OrderController::class, 'index'])->name('index');
     Route::get('/{order}', [OrderController::class, 'show'])->name('show');
     Route::post('/', [OrderController::class, 'store'])->name('store');
+    Route::post('/status/{id}', [OrderController::class, 'status'])->name('status');
 
 });
 
@@ -74,7 +75,7 @@ Route::group([
 Route::group([
     'as' => 'address.',
     'prefix' => 'address',
-
+    'middleware'=>'auth:sanctum',
 ], function() {
     Route::get('/', [AddressController::class, 'index'])->name('index');
     Route::post('/', [AddressController::class, 'store'])->name('store');

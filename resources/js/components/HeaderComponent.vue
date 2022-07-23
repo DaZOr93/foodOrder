@@ -65,7 +65,7 @@
                                 Все заказы
                             </router-link>
                         </li>
-                        <li v-if="stateUser['role_id'] === 3">
+                        <li v-if="stateToken">
                             <router-link  to="/profile" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24">
                                     <use xlink:href="#people-circle"></use>
@@ -100,7 +100,7 @@
 
 <script>
 import {axiosInstance} from "../service/api";
-import {mapGetters, mapMutations, mapActions} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 export default {
     name: "HeaderComponent",
     data() {

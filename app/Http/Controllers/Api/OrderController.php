@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Order\StatusRequest;
 use App\Http\Requests\Order\StoreRequest;
 use App\Models\Address;
 use App\Models\Basket;
@@ -14,14 +15,20 @@ class OrderController extends Controller
 {
     public function index()
     {
-
-        $orders = Order::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+        if(Auth::user()->role_id === 1){
+            $orders = Order::orderBy('created_at', 'desc')->paginate(10);
+            return $orders;
+        }
+        $orders = Order::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10);
         return $orders;
     }
     public function show($id)
         {
-            $order = Order::with(['menu'])->find($id);
-            return $order;
+            $order = Order::with(['menu'])->with(['user'])->find($id);
+            if((Auth::user()->role_id === 1) || (Auth::user()->id === $order->user_id)){
+                return $order;
+            }
+            return 404;
         }
     public function store(StoreRequest $request)
     {
@@ -61,5 +68,12 @@ class OrderController extends Controller
             return $order->id;
         }
 
+    }
+    public function status(StatusRequest $request, $id)
+    {
+        $data = $request->validated();
+        $order = Order::find($id);
+        $order ->update($data);
+        return 200;
     }
 }

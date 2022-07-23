@@ -22,7 +22,7 @@ window.Vue = require('vue').default;
 
 /*Vue.component('example-component', require('./components/ExampleComponent.vue').default);*/
 
-
+Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.component('header-component', require('./components/HeaderComponent.vue').default);
 Vue.component('v-notification', require('./components/notifications/v-notification').default);
 Vue.component('v-popup', require('./components/popup/v-popup').default);
@@ -35,7 +35,7 @@ Vue.component('v-popup', require('./components/popup/v-popup').default);
 import router from "./router";
 import store from "./store";
 import 'material-design-icons-iconfont'
-import {mapGetters, mapMutations, mapActions} from 'vuex';
+import {mapActions} from 'vuex';
 
 const app = new Vue({
     el: '#app',

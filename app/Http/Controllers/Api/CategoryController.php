@@ -64,7 +64,7 @@ class CategoryController extends Controller
             $category->delete();
             return 200;
         }
-        return ;
+        return response()->json(['errors' => ['delete'=>["Категория не пустая"]]], 422);
 
     }
 }

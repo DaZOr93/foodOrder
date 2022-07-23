@@ -5,7 +5,7 @@
             <td> {{name}} </td>
             <td> {{price}} </td>
             <td class="d-flex" >
-                <input type="number" name="quantity" max="20" min="1"  v-model="count" class="form-control quantity" >
+                <input @blur="setCount" type="number" name="quantity" max="20" min="1"  v-model="count" class="form-control quantity" >
                 <button type="button" v-on:click="addBasket(menuId)" class="btn btn-sm btn-outline-secondary">Ок</button>
             </td>
             <td> {{price*quantity}} </td>
@@ -60,7 +60,11 @@ export default {
                 quantity: +this.count
             })
         },
-
+        setCount() {
+            setTimeout(() => {
+                this.count = this.quantity
+            }, 900);
+        }
     },
     created() {
         this.count = this.quantity

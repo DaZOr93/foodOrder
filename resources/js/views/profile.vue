@@ -3,6 +3,7 @@
         <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
             <div class="card h-100">
                 <div class="card-body">
+                    <form action="">
                         <div class="row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <h6 class="mb-2 text-primary">Профиль</h6>
@@ -41,6 +42,7 @@
                                 </div>
                             </div>
                         </div>
+                    </form>
                         <div class="row gutters mt-4">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="text-right">
@@ -55,7 +57,7 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations, mapActions} from 'vuex';
+import {mapGetters,  mapActions} from 'vuex';
 export default {
     name: "profile",
     data() {

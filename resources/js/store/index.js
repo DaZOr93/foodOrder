@@ -9,15 +9,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        orders: [],
-        showOrder: [],
-        basket: [],
+        orders: {},
+        showOrder: {},
+        basket: {},
         totalCostBasket: 0,
         address: [],
         notification: [],
         token: null,
         profile: [],
-        user: [],
+        user: {},
         menuItem: {},
         categoryItem: {},
         categories: [],
@@ -153,18 +153,20 @@ export default new Vuex.Store({
                     return err.response
                 })
         },
-        readUser({commit, dispatch, getters}) {
+        readUser({commit, getters}) {
             if (getters.stateToken) {
                 return axiosInstance.get('/api/profile')
                     .then(res => {
                         commit('setUser', res.data)
-
+                        localStorage.setItem('user', JSON.stringify(res.data))
+                        return res
                     })
                     .catch(err => {
-
+                        return err.response
                     })
             } else {
                 commit('setUser', [])
+                localStorage.removeItem('user')
             }
         },
 
@@ -174,6 +176,7 @@ export default new Vuex.Store({
         unauthorized({dispatch}, err) {
             if (err.response.status === 401) {
                 localStorage.removeItem('x_xsrf_token')
+                localStorage.removeItem('user')
                 dispatch('readToken')
                 router.push({name: 'login'})
             }
@@ -190,8 +193,8 @@ export default new Vuex.Store({
             return 200;
 
         },
-        loadOrders({commit, dispatch}) {
-            return axiosInstance.get('/api/order')
+        loadOrders({commit, dispatch},page = 1) {
+            return axiosInstance.get('/api/order?page=' + page)
                 .then(res => {
                     commit('setOrders', res.data)
                 })
@@ -318,6 +321,7 @@ export default new Vuex.Store({
                         return resp
                     })
             }
+            return 405;
         },
         loadCategoryItem({commit, dispatch}, id) {
             return axiosInstance.get('/api/category/' + id)
@@ -366,8 +370,30 @@ export default new Vuex.Store({
                         dispatch('loadCategories')
                         return resp
                     })
+                    .catch(err => {
+                        let errors = err.response.data.errors
+                        for (let key in errors) {
+                            dispatch('addNotificationError', errors[key][0])
+                        }
+                        return err.response
+                    })
             }
         },
+        updateStatusOrder({dispatch}, data) {
+            return axiosInstance.post('/api/order/status/' + data.id, data)
+                .then((resp) => {
+                    dispatch('addNotification', 'Cтатус обновлен');
+
+                    return resp
+                })
+                .catch(err => {
+                    let errors = err.response.data.errors
+                    for (let key in errors) {
+                        dispatch('addNotificationError', errors[key][0])
+                    }
+                    return err.response
+                })
+        }
 
 
     },
