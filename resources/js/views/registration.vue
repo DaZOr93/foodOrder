@@ -6,25 +6,56 @@
                     <use xlink:href="#food"></use>
                 </svg>
             </router-link>
-            <form action="">
-                <h1 class="h3 mb-3 font-weight-normal">Введите данные для регистрации</h1>
-                <input v-model="name" type="text" id="inputName" class="form-control mb-1" placeholder="Введите имя"
-                       required="" autofocus="">
-                <input v-model="email" type="email" id="inputEmail" class="form-control mb-1"
-                       placeholder="Email address" required="" autofocus="" autocomplete="on">
-                <input v-model="phone" type="tel" id="inputPhone" class="form-control mb-1" placeholder="+380507290987"
-                       required="" autofocus="">
-                <input v-model="password" type="password" id="inputPassword" class=" mb-1 form-control"
-                       placeholder="Пароль" required="" autocomplete="on">
-                <input v-model="password_confirmation" type="password" id="password_confirmation"
-                       class=" mb-2 form-control" placeholder="Пароль еще раз" required="" autocomplete="off">
-                <div>
-                    <router-link to="/login" class="btn btn-lg  btn-primary btn-block" type="button">Войти</router-link>
-                    <button v-on:click="registration()" class="btn btn-lg  btn-primary btn-block" type="button">
-                        Регистрация
-                    </button>
-                </div>
-            </form>
+            <ValidationObserver v-slot="{ handleSubmit }">
+                <form @submit.prevent="handleSubmit(registration)">
+                    <h1 class="h3 mb-3 font-weight-normal">Введите данные для регистрации</h1>
+                    <ValidationProvider rules="required|min_value:3" v-slot="{ errors }">
+                        <div>
+                            <input v-model="name" type="text" id="inputName" class="form-control mb-1"
+                                   placeholder="Введите имя"
+                                   required="" autofocus="">
+                        </div>
+                        <span>{{ errors[0] }}</span>
+                    </ValidationProvider>
+                    <ValidationProvider rules="required|email" v-slot="{ errors }">
+                        <div>
+                            <input v-model="email" type="email" id="inputEmail" class="form-control mb-1"
+                                   placeholder="Email address" required="" autofocus="" autocomplete="on">
+                        </div>
+                        <span>{{ errors[0] }}</span>
+                    </ValidationProvider>
+                    <ValidationProvider :rules="{ regex: /^\+380\d{3}\d{2}\d{2}\d{2}$/ }" v-slot="{ errors }">
+                        <div>
+                            <input v-model="phone" type="tel" id="inputPhone" class="form-control mb-1"
+                                   placeholder="+380507290987"
+                                   required="" autofocus="">
+                        </div>
+                        <span>{{ errors[0] }}</span>
+                    </ValidationProvider>
+                    <ValidationProvider rules="required|min_value:8" v-slot="{ errors }">
+                        <div>
+                            <input v-model="password" type="password" id="inputPassword" class=" mb-1 form-control"
+                                   placeholder="Пароль" required="" autocomplete="on">
+                        </div>
+                        <span>{{ errors[0] }}</span>
+                    </ValidationProvider>
+                    <ValidationProvider rules="required|min_value:8" v-slot="{ errors }">
+                        <div>
+                            <input v-model="password_confirmation" type="password" id="password_confirmation"
+                                   class=" mb-2 form-control" placeholder="Пароль еще раз" required=""
+                                   autocomplete="off">
+                        </div>
+                        <span>{{ errors[0] }}</span>
+                    </ValidationProvider>
+                    <div>
+                        <router-link to="/login" class="btn btn-lg  btn-primary btn-block" type="button">Войти
+                        </router-link>
+                        <button class="btn btn-lg  btn-primary btn-block" type="submit">
+                            Регистрация
+                        </button>
+                    </div>
+                </form>
+            </ValidationObserver>
         </div>
     </div>
 </template>
@@ -32,8 +63,13 @@
 <script>
 import {mapActions} from 'vuex';
 import {axiosInstance} from "../service/api";
+import {ValidationProvider, ValidationObserver} from 'vee-validate/dist/vee-validate.full.esm';
 
 export default {
+    components: {
+        ValidationProvider,
+        ValidationObserver
+    },
     name: "registration",
     data() {
         return {
