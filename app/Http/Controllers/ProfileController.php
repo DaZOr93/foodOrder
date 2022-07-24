@@ -11,11 +11,7 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $user = Auth::user();
@@ -27,7 +23,7 @@ class ProfileController extends Controller
     {
         $user = User::find($id);
         $data = $request->validated();
-
+return $data;
         if($data['password'] == null){
             unset($data['password']);
 

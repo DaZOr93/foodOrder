@@ -21,7 +21,11 @@ use Illuminate\Http\Request;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/{any}', function () {
+    return view('vue');
+})->where('any', '.*');
 
+/*
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
@@ -41,11 +45,11 @@ Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
 
     return back()->with('message', 'Verification link sent!');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');*/
 
 
-require __DIR__.'/auth.php';
-Route::group([
+/*require __DIR__.'/auth.php';*/
+/*Route::group([
     'as' => 'user.',
     'prefix' => 'user',
     'middleware'=>['auth','role:1'],
@@ -136,5 +140,11 @@ Route::group([
     Route::get('/{address}/edit', [AddressController::class, 'edit'])->name('edit');
     Route::put('/{address}', [AddressController::class, 'update'])->name('update');
     Route::delete('/{address}', [AddressController::class, 'destroy'])->name('destroy');
-});
+});*/
 
+
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

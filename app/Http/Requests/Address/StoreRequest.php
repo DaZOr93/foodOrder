@@ -30,13 +30,22 @@ class StoreRequest extends FormRequest
             'apartment'=> ['string','min:1','nullable','max:5'],
         ];
     }
+    public function attributes()
+    {
+        return [
+            'city' => 'город',
+            'street' => 'улица',
+            'house' => 'дом',
+            'apartment' => 'квартира',
+        ];
+    }
     public function messages()
     {
         return [
-            'min' => 'Минимум :min символа',
-            'required' => 'Поле обязательно для заполнения',
-            'max' => 'Максимум :max символа',
-            'string'  => 'Поле должно быть строкой',
+            'min' => 'Поле ":attribute" минимум :min символа',
+            'required' => 'Поле ":attribute" обязательно для заполнения',
+            'max' => 'Поле ":attribute" максимум :max символа',
+            'string'  => 'Поле ":attribute" должно быть строкой',
 
         ];
     }
